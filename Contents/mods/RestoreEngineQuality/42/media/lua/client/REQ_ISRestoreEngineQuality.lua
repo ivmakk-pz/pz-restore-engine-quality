@@ -1,4 +1,4 @@
-﻿require "TimedActions/ISBaseTimedAction"
+require "TimedActions/ISBaseTimedAction"
 
 ---@class REQ_ISRestoreEngineQuality : ISBaseTimedAction
 ---@field vehicle BaseVehicle
@@ -47,10 +47,28 @@ function REQ_ISRestoreEngineQuality:getEngineQuality(part)
     return 100
 end
 
+---Calculate maximum restorable quality based on mechanic skill level
+---@param mechanicLevel number
+---@return number maxQuality
+function REQ_ISRestoreEngineQuality:getMaxQuality(mechanicLevel)
+    local maxQuality = mechanicLevel * 10  -- Level 6 = 60%, Level 9 = 90%, Level 10 = 100%
+    if maxQuality > 100 then maxQuality = 100 end
+    return maxQuality
+end
+
+---Static helper function to calculate maximum restorable quality
+---@param mechanicLevel number
+---@return number maxQuality
+function REQ_ISRestoreEngineQuality.calculateMaxQuality(mechanicLevel)
+    local maxQuality = mechanicLevel * 10  -- Level 6 = 60%, Level 9 = 90%, Level 10 = 100%
+    if maxQuality > 100 then maxQuality = 100 end
+    return maxQuality
+end
+
 ---Complete the engine quality restoration action
 ---@return boolean success
 function REQ_ISRestoreEngineQuality:complete()
-     local skill = self.character:getPerkLevel(Perks.Mechanics) - self.vehicle:getScript():getEngineRepairLevel()
+    local skill = self.character:getPerkLevel(Perks.Mechanics) - self.vehicle:getScript():getEngineRepairLevel()
     local numberOfParts = self.character:getInventory():getNumberOfItem("EngineParts", false, true)
     
     if self.vehicle then
@@ -61,6 +79,10 @@ function REQ_ISRestoreEngineQuality:complete()
         
         local currentQuality = self:getEngineQuality(self.part)
         
+        -- Calculate maximum quality based on mechanic skill level
+        local mechanicLevel = self.character:getPerkLevel(Perks.Mechanics)
+        local maxQuality = self:getMaxQuality(mechanicLevel)
+        
         -- Calculate quality improvement per part based on skill
         local qualityPerPart = 3 + (skill / 2)
         if qualityPerPart > 10 then qualityPerPart = 10 end
@@ -68,13 +90,16 @@ function REQ_ISRestoreEngineQuality:complete()
         local done = 0
         local newQuality = currentQuality
         
-        for i=1,numberOfParts do
-            newQuality = newQuality + qualityPerPart
-            done = done + 1
-            
-            if newQuality >= 100 then
-                newQuality = 100
-                break
+        -- Use 2 engine parts per restoration iteration for increased challenge
+        for i=1,numberOfParts,2 do
+            if numberOfParts - (i - 1) >= 2 then  -- Ensure we have at least 2 parts
+                newQuality = newQuality + qualityPerPart
+                done = done + 2  -- Consume 2 parts per iteration
+                
+                if newQuality >= maxQuality then
+                    newQuality = maxQuality
+                    break
+                end
             end
         end
         

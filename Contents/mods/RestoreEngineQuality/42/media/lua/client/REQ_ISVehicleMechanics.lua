@@ -1,4 +1,4 @@
-﻿-- ===================================================================================================== --
+-- ===================================================================================================== --
 -- VEHICLE MECHANICS MENU EXTENSION
 -- ===================================================================================================== --
 
@@ -40,20 +40,25 @@ function REQ_ISVehicleMechanics.extendedDoPartContextMenu(self, part, x, y)
     -- Add our custom option for engine quality restoration
     if part:getId() == "Engine" and not VehicleUtils.RequiredKeyNotFound(part, self.chr) then
         local engineQuality = part:getVehicle():getEngineQuality()
+        
+        -- Calculate maximum quality based on mechanic skill level using our helper function
+        local mechanicLevel = self.chr:getPerkLevel(Perks.Mechanics)
+        local maxQuality = REQ_ISRestoreEngineQuality.calculateMaxQuality(mechanicLevel)
 
         -- Debug logging
         print("[REQ] Engine quality: " .. engineQuality)
+        print("[REQ] Max quality for skill level " .. mechanicLevel .. ": " .. maxQuality .. "%")
         print("[REQ] EngineParts: " .. self.chr:getInventory():getNumberOfItem("EngineParts", false, true))
         print("[REQ] Wrench: " .. tostring(self.chr:getInventory():containsTypeRecurse("Wrench")))
-        print("[REQ] Mechanics skill: " .. self.chr:getPerkLevel(Perks.Mechanics))
+        print("[REQ] Engine power: " .. part:getVehicle():getScript():getEngineForce() *  math.max(0.6, (engineQuality * 1.6 / 100)))
         
-        -- Check if restoration is possible
-        if engineQuality < 100 and 
-           self.chr:getInventory():getNumberOfItem("EngineParts", false, true) > 0 and
+        -- Check if restoration is possible (engine quality below skill cap and has requirements)
+        if engineQuality < maxQuality and 
+           self.chr:getInventory():getNumberOfItem("EngineParts", false, true) >= 2 and
            self.chr:getPerkLevel(Perks.Mechanics) >= part:getVehicle():getScript():getEngineRepairLevel() and
            self.chr:getInventory():containsTypeRecurse("Wrench") then
             
-           local option = self.context:addOption("Restore Engine Quality (" .. engineQuality .. "%)", 
+           local option = self.context:addOption("Restore Engine Quality (" .. engineQuality .. "% -> " .. maxQuality .. "%)", 
                 getPlayer(), ISVehicleMechanics.onRestoreEngineQuality, part)
         end
     end
