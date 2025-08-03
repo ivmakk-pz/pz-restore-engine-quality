@@ -14,5 +14,7 @@
         "io": "disable",
         "package": "disable"
     },
-    "Lua.workspace.checkThirdParty": false
+    "Lua.workspace.checkThirdParty": false,
+    "files.eol": "\n",
+    "files.encoding": "utf8"
 }
