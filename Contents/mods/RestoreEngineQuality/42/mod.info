@@ -1,0 +1,8 @@
+name=Restore Engine Quality
+id=Ivmakk_RestoreEngineQuality
+poster=poster.png
+icon=icon.png
+author=ivmakk
+description=A mod that restores engine quality and performance in Project Zomboid
+modversion=1.0.0
+versionMin=42.0.2

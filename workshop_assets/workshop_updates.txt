@@ -1,0 +1,12 @@
+# Workshop Update History
+
+## Upload 1 - 2025-08-03
+- Initial release
+- Version 1.0.0
+
+## Template Notes:
+Track each workshop upload here with:
+- Date of upload
+- Version number
+- Brief description of changes
+- Any important notes for users

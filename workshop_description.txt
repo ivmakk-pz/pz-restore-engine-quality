@@ -1,0 +1,27 @@
+[b]Restore Engine Quality[/b] - A comprehensive mod that allows players to restore and maintain vehicle engine quality in Project Zomboid.
+
+This mod provides mechanics to repair degraded vehicle engines and maintain optimal performance throughout your survival experience.
+
+[h2]Features[/h2]
+[list]
+[*]Engine quality restoration system
+[*]Performance improvement mechanics
+[*]Realistic engine maintenance features
+[/list]
+
+[h2]Installation[/h2]
+[olist]
+[*]Subscribe to this mod on Steam Workshop
+[*]Enable the mod in your mod list
+[*]Start playing!
+[/olist]
+
+[h2]Compatibility[/h2]
+[list]
+[*]Compatible with Project Zomboid Build 42+
+[*]Works with most other mods
+[*]Safe to add/remove mid-game
+[/list]
+
+[h2]Feedback[/h2]
+Found a bug or have suggestions? Leave a comment!
