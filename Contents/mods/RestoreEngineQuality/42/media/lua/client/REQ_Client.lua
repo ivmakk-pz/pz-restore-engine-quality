@@ -4,6 +4,7 @@
 
 -- Print mod loading message
 local vehicleMechanics = require "REQ_ISVehicleMechanics"
+local modOptions = require "REQ_ModOptions"
 
 -- Main mod initialization
 local RestoreEngineQuality = {}
@@ -15,11 +16,21 @@ RestoreEngineQuality.isInitialized = false
 function RestoreEngineQuality.init()
     -- Prevent multiple initializations
     if RestoreEngineQuality.isInitialized then
-        print("[REQ] Already initialized, skipping...")
         return
     end
     
     print("[REQ] Initializing vehicle mechanics menu extension...")
+    
+    -- Initialize mod options
+    local optionsSuccess, optionsError = pcall(function()
+        modOptions.initialize()
+        print("[REQ] Mod options initialized")
+    end)
+    
+    if not optionsSuccess then
+        print("[REQ] WARNING: " .. tostring(optionsError))
+        print("[REQ] Mod will continue with default option values")
+    end
     
     -- Initialize our vehicle mechanics override to ensure compatibility with other mods
     local success, errorMsg = pcall(function()
@@ -28,7 +39,7 @@ function RestoreEngineQuality.init()
     end)
     
     if not success then
-        print("[REQ] ERROR: Failed to initialize vehicle mechanics override: " .. tostring(errorMsg))
+        print("[REQ] ERROR: " .. tostring(errorMsg))
         print("[REQ] Mod will continue without vehicle mechanics override")
     end
 

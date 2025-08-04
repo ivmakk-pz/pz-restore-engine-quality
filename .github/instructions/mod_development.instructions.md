@@ -10,18 +10,19 @@ This workspace contains multiple directory structures with different purposes:
 - **`Contents/mods/RestoreEngineQuality/`** - Our main code folder where all development work happens
   - Contains your mod files and all new features, modifications, and implementations
 
-### Reference Directory (READ-ONLY)
-- **`Contents_original_mod/mods/{REFERENCE_MOD}/`** - Original mod for reference only (if applicable)
-  - Contains the complete original mod source code (if this is an extension mod)
-  - Used as reference material to understand the base functionality you're extending
-  - **DO NOT MODIFY** - This directory should remain unchanged to preserve the original implementation
-  - Useful for understanding existing systems, APIs, and patterns used in the base mod
+### Game Files Reference Directory (READ-ONLY)
+- **`PZ_Files/`** - Original Project Zomboid game files for reference only
+  - Contains vanilla game mechanic implementations (ISRepairEngine.lua, ISVehicleMechanics.lua, Vehicles.lua, etc.)
+  - Used as reference material to understand the original game mechanics being modified
+  - **DO NOT MODIFY** - This directory should remain unchanged to preserve the original game implementation
+  - Essential for understanding how the base game systems work before modifying them
+  - Helps ensure mod compatibility and proper integration with vanilla mechanics
 
 ### Other Directories
 - **`workshop_assets/`** - Steam Workshop assets and metadata
 - **Root files** - Mod documentation and configuration (README.md, CHANGELOG.md, etc.)
 
-When developing features, always work in the `Contents/mods/RestoreEngineQuality/` directory and reference any original mod code from `Contents_original_mod/` as needed (if applicable).
+When developing features, always work in the `Contents/mods/RestoreEngineQuality/` directory and reference vanilla game mechanics from `PZ_Files/` for understanding the original implementation.
 
 ## Function Documentation Guidelines:
 - Use LuaLS/EmmyLua type annotations for all functions (---@param, ---@return, ---@type).

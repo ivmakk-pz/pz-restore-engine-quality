@@ -1,5 +1,8 @@
 require "TimedActions/ISBaseTimedAction"
 
+local REQ_Requirements = require "REQ_Requirements"
+local REQ_ModOptions = require "REQ_ModOptions"
+
 ---@class REQ_ISRestoreEngineQuality : ISBaseTimedAction
 ---@field vehicle BaseVehicle
 ---@field part VehiclePart
@@ -9,8 +12,8 @@ local REQ_ISRestoreEngineQuality = ISBaseTimedAction:derive("ISRestoreEngineQual
 
 
 function REQ_ISRestoreEngineQuality:isValid()
-	--	return self.vehicle:isInArea(self.part:getArea(), self.character)
-	return true;
+    local requirementResults = REQ_Requirements.validateAllRequirements(self.character, self.part)
+    return requirementResults:areAllRequirementsMet()
 end
 
 function REQ_ISRestoreEngineQuality:waitToStart()
@@ -47,28 +50,34 @@ function REQ_ISRestoreEngineQuality:getEngineQuality(part)
     return 100
 end
 
----Calculate maximum restorable quality based on mechanic skill level
+---Calculate maximum restorable quality (always 100%)
 ---@param mechanicLevel number
 ---@return number maxQuality
 function REQ_ISRestoreEngineQuality:getMaxQuality(mechanicLevel)
-    local maxQuality = mechanicLevel * 10  -- Level 6 = 60%, Level 9 = 90%, Level 10 = 100%
-    if maxQuality > 100 then maxQuality = 100 end
-    return maxQuality
+    return 100  -- Always allow restoration to 100%
 end
 
----Static helper function to calculate maximum restorable quality
+---Static helper function to calculate maximum restorable quality (always 100%)
 ---@param mechanicLevel number
 ---@return number maxQuality
 function REQ_ISRestoreEngineQuality.calculateMaxQuality(mechanicLevel)
-    local maxQuality = mechanicLevel * 10  -- Level 6 = 60%, Level 9 = 90%, Level 10 = 100%
-    if maxQuality > 100 then maxQuality = 100 end
-    return maxQuality
+    return 100  -- Always allow restoration to 100%
+end
+
+---Static helper function to calculate quality improvement per iteration
+---@param mechanicLevel number
+---@param engineRepairLevel number
+---@return number qualityPerIteration
+function REQ_ISRestoreEngineQuality.calculateQualityPerIteration(mechanicLevel, engineRepairLevel)
+    local skill = mechanicLevel - engineRepairLevel
+    local qualityPerIteration = 3 + (skill / 2)
+    if qualityPerIteration > 10 then qualityPerIteration = 10 end
+    return qualityPerIteration
 end
 
 ---Complete the engine quality restoration action
 ---@return boolean success
 function REQ_ISRestoreEngineQuality:complete()
-    local skill = self.character:getPerkLevel(Perks.Mechanics) - self.vehicle:getScript():getEngineRepairLevel()
     local numberOfParts = self.character:getInventory():getNumberOfItem("EngineParts", false, true)
     
     if self.vehicle then
@@ -79,22 +88,24 @@ function REQ_ISRestoreEngineQuality:complete()
         
         local currentQuality = self:getEngineQuality(self.part)
         
-        -- Calculate maximum quality based on mechanic skill level
+        -- Maximum quality is always 100%
         local mechanicLevel = self.character:getPerkLevel(Perks.Mechanics)
-        local maxQuality = self:getMaxQuality(mechanicLevel)
+        local maxQuality = 100
         
-        -- Calculate quality improvement per part based on skill
-        local qualityPerPart = 3 + (skill / 2)
-        if qualityPerPart > 10 then qualityPerPart = 10 end
+        -- Calculate quality improvement per iteration based on skill
+        local qualityPerIteration = REQ_ISRestoreEngineQuality.calculateQualityPerIteration(mechanicLevel, self.vehicle:getScript():getEngineRepairLevel())
+        
+        -- Get configurable engine parts per iteration from mod options
+        local partsPerIteration = REQ_ModOptions.getEnginePartsPerIteration()
         
         local done = 0
         local newQuality = currentQuality
         
-        -- Use 2 engine parts per restoration iteration for increased challenge
-        for i=1,numberOfParts,2 do
-            if numberOfParts - (i - 1) >= 2 then  -- Ensure we have at least 2 parts
-                newQuality = newQuality + qualityPerPart
-                done = done + 2  -- Consume 2 parts per iteration
+        -- Use configurable engine parts per restoration iteration
+        for i=1,numberOfParts,partsPerIteration do
+            if numberOfParts - (i - 1) >= partsPerIteration then
+                newQuality = newQuality + qualityPerIteration
+                done = done + partsPerIteration
                 
                 if newQuality >= maxQuality then
                     newQuality = maxQuality
@@ -104,15 +115,17 @@ function REQ_ISRestoreEngineQuality:complete()
         end
         
         if done > 0 and newQuality > currentQuality then
-            -- Get current engine parameters
-            local engineLoudness = self.vehicle:getScript():getEngineLoudness()
-            local baseEnginePower = self.vehicle:getScript():getEngineForce()
-            
+           local baseEnginePower = self.vehicle:getScript():getEngineForce()
+            local currentEnginePower = self.vehicle:getEnginePower()
+            -- Multiply by 2.7 to compensate for Java setEngineFeature() dividing by 2.7F (see BaseVehicle#setEngineFeature() in BaseVehicle.java)
+            -- This keeps the engine loudness constant after repair
+            local engineLoudness = self.part:getVehicle():getEngineLoudness() * 2.7
+         
             -- Calculate new engine power based on quality
             local qualityBoosted = newQuality * 1.6
             if qualityBoosted > 100 then qualityBoosted = 100 end
             local qualityModifier = math.max(0.6, (qualityBoosted / 100))
-            local newEnginePower = baseEnginePower * qualityModifier
+            local newEnginePower = math.max(currentEnginePower, baseEnginePower * qualityModifier)
             
             -- Update engine with new quality
             self.vehicle:setEngineFeature(newQuality, engineLoudness, newEnginePower)

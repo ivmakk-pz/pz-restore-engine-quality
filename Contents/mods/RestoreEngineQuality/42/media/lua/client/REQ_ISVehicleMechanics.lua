@@ -3,9 +3,16 @@
 -- ===================================================================================================== --
 
 local REQ_ISRestoreEngineQuality = require "REQ_ISRestoreEngineQuality"
+local REQ_Tooltips = require "REQ_Tooltips"
+local REQ_Requirements = require "REQ_Requirements"
+local REQ_ModOptions = require "REQ_ModOptions"
 
 -- Create our override class for better mod compatibility
 local REQ_ISVehicleMechanics = {}
+
+-- ===================================================================================================== --
+-- MAIN OVERRIDE FUNCTIONS  
+-- ===================================================================================================== --
 
 -- Store original method reference
 REQ_ISVehicleMechanics.originalDoPartContextMenu = nil
@@ -16,7 +23,6 @@ function REQ_ISVehicleMechanics.initialize()
     if not REQ_ISVehicleMechanics.originalDoPartContextMenu or 
        ISVehicleMechanics.doPartContextMenu ~= REQ_ISVehicleMechanics.extendedDoPartContextMenu then
         REQ_ISVehicleMechanics.originalDoPartContextMenu = ISVehicleMechanics.doPartContextMenu
-        print("[REQ] Stored reference to current doPartContextMenu method")
     end
     
     -- Apply our override
@@ -26,8 +32,6 @@ function REQ_ISVehicleMechanics.initialize()
     if not ISVehicleMechanics.onRestoreEngineQuality then
         ISVehicleMechanics.onRestoreEngineQuality = REQ_ISVehicleMechanics.onRestoreEngineQuality
     end
-    
-    print("[REQ] Vehicle mechanics menu override applied successfully")
 end
 
 -- Our extended doPartContextMenu method
@@ -41,25 +45,18 @@ function REQ_ISVehicleMechanics.extendedDoPartContextMenu(self, part, x, y)
     if part:getId() == "Engine" and not VehicleUtils.RequiredKeyNotFound(part, self.chr) then
         local engineQuality = part:getVehicle():getEngineQuality()
         
-        -- Calculate maximum quality based on mechanic skill level using our helper function
-        local mechanicLevel = self.chr:getPerkLevel(Perks.Mechanics)
-        local maxQuality = REQ_ISRestoreEngineQuality.calculateMaxQuality(mechanicLevel)
-
-        -- Debug logging
-        print("[REQ] Engine quality: " .. engineQuality)
-        print("[REQ] Max quality for skill level " .. mechanicLevel .. ": " .. maxQuality .. "%")
-        print("[REQ] EngineParts: " .. self.chr:getInventory():getNumberOfItem("EngineParts", false, true))
-        print("[REQ] Wrench: " .. tostring(self.chr:getInventory():containsTypeRecurse("Wrench")))
-        print("[REQ] Engine power: " .. part:getVehicle():getScript():getEngineForce() *  math.max(0.6, (engineQuality * 1.6 / 100)))
+        -- Validate all requirements
+        local requirementResults = REQ_Requirements.validateAllRequirements(self.chr, part)
         
-        -- Check if restoration is possible (engine quality below skill cap and has requirements)
-        if engineQuality < maxQuality and 
-           self.chr:getInventory():getNumberOfItem("EngineParts", false, true) >= 2 and
-           self.chr:getPerkLevel(Perks.Mechanics) >= part:getVehicle():getScript():getEngineRepairLevel() and
-           self.chr:getInventory():containsTypeRecurse("Wrench") then
-            
-           local option = self.context:addOption("Restore Engine Quality (" .. engineQuality .. "% -> " .. maxQuality .. "%)", 
-                getPlayer(), ISVehicleMechanics.onRestoreEngineQuality, part)
+        -- Always context meny option for engine restoration
+        local option = self.context:addOption("Restore Engine Quality (" .. engineQuality .. "%)", 
+            getPlayer(), ISVehicleMechanics.onRestoreEngineQuality, part)
+        
+        -- Add comprehensive tooltip with requirement checking
+        REQ_Tooltips.createRestoreEngineTooltip(option, requirementResults)
+
+        if not requirementResults:areAllRequirementsMet() then
+            option.notAvailable = true
         end
     end
 end
@@ -72,8 +69,6 @@ function REQ_ISVehicleMechanics.onRestoreEngineQuality(playerObj, part)
     if item then
         ISTimedActionQueue.add(ISPathFindAction:pathToVehicleArea(playerObj, part:getVehicle(), part:getArea()))
         ISTimedActionQueue.add(REQ_ISRestoreEngineQuality:new(playerObj, part, item, 400))
-    else
-        print("[REQ] Warning: No wrench found for engine quality restoration")
     end
 end
 
