@@ -18,14 +18,8 @@ local REQ_ModOptions = require "REQ_ModOptions"
 ---@return number requiredLevel
 function REQ_Requirements.checkMechanicSkillRequirement(character, part)
     local currentLevel = character:getPerkLevel(Perks.Mechanics)
-    local baseRequiredLevel = part:getVehicle():getScript():getEngineRepairLevel()
-    local currentQuality = part:getVehicle():getEngineQuality()
-    
-    -- Calculate required level to restore BEYOND current quality
-    -- Quality 60% needs level 7 to restore to 70%, quality 59% needs level 6 to restore to 60%
-    local requiredLevelForNextTier = math.ceil(currentQuality / 10) + 1
-    local requiredLevel = math.max(baseRequiredLevel, requiredLevelForNextTier)
-    
+    local requiredLevel = part:getVehicle():getScript():getEngineRepairLevel()
+
     return currentLevel >= requiredLevel, currentLevel, requiredLevel
 end
 

@@ -2,7 +2,9 @@
 -- MOD OPTIONS FOR RESTORE ENGINE QUALITY
 -- ===================================================================================================== --
 
-local REQ_ModOptions = {}
+local REQ_ModOptions = {
+    enginePartsPerIteration = nil,
+}
 
 -- ===================================================================================================== --
 -- OPTION ACCESS FUNCTIONS
@@ -11,21 +13,7 @@ local REQ_ModOptions = {}
 ---Get the number of engine parts required per restoration iteration
 ---@return number partsPerIteration Between 1-5, default 2
 function REQ_ModOptions.getEnginePartsPerIteration()
-    if not PZAPI or not PZAPI.ModOptions then
-        return 2 -- Default fallback if mod options not available
-    end
-    
-    local options = PZAPI.ModOptions:getOptions("Ivmakk_RestoreEngineQuality")
-    if not options then
-        return 2 -- Default fallback if options not found
-    end
-    
-    local partsOption = options:getOption("enginePartsPerIteration")
-    if not partsOption then
-        return 2 -- Default fallback if specific option not found
-    end
-    
-    return partsOption:getValue()
+    return REQ_ModOptions.enginePartsPerIteration and REQ_ModOptions.enginePartsPerIteration:getValue() or 2
 end
 
 -- ===================================================================================================== --
@@ -43,7 +31,7 @@ function REQ_ModOptions.initialize()
     local options = PZAPI.ModOptions:create("Ivmakk_RestoreEngineQuality", getText("UI_options_REQ_title"))
     
     -- Add engine parts per iteration slider
-    local partsSlider = options:addSlider(
+    REQ_ModOptions.enginePartsPerIteration = options:addSlider(
         "enginePartsPerIteration",  
         getText("UI_options_REQ_enginePartsPerIteration"),
         1,    -- minimum value
@@ -53,8 +41,5 @@ function REQ_ModOptions.initialize()
         getText("UI_options_REQ_enginePartsPerIteration_tooltip")
     )
 end
-
--- Hook into game initialization
-Events.OnGameStart.Add(REQ_ModOptions.initialize)
 
 return REQ_ModOptions

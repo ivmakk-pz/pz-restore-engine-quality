@@ -45,18 +45,20 @@ function REQ_ISVehicleMechanics.extendedDoPartContextMenu(self, part, x, y)
     if part:getId() == "Engine" and not VehicleUtils.RequiredKeyNotFound(part, self.chr) then
         local engineQuality = part:getVehicle():getEngineQuality()
         
-        -- Validate all requirements
-        local requirementResults = REQ_Requirements.validateAllRequirements(self.chr, part)
-        
-        -- Always context meny option for engine restoration
-        local option = self.context:addOption("Restore Engine Quality (" .. engineQuality .. "%)", 
-            getPlayer(), ISVehicleMechanics.onRestoreEngineQuality, part)
-        
-        -- Add comprehensive tooltip with requirement checking
-        REQ_Tooltips.createRestoreEngineTooltip(option, requirementResults)
+        if engineQuality < 100 then
+            -- Validate all requirements
+            local requirementResults = REQ_Requirements.validateAllRequirements(self.chr, part)
+            
+            -- Always context meny option for engine restoration
+            local option = self.context:addOption("Restore Engine Quality (" .. engineQuality .. "%)", 
+                getPlayer(), ISVehicleMechanics.onRestoreEngineQuality, part)
+            
+            -- Add comprehensive tooltip with requirement checking
+            REQ_Tooltips.createRestoreEngineTooltip(option, requirementResults)
 
-        if not requirementResults:areAllRequirementsMet() then
-            option.notAvailable = true
+            if not requirementResults:areAllRequirementsMet() then
+                option.notAvailable = true
+            end
         end
     end
 end

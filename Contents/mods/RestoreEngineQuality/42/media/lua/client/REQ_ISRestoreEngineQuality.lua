@@ -50,29 +50,24 @@ function REQ_ISRestoreEngineQuality:getEngineQuality(part)
     return 100
 end
 
----Calculate maximum restorable quality (always 100%)
----@param mechanicLevel number
----@return number maxQuality
-function REQ_ISRestoreEngineQuality:getMaxQuality(mechanicLevel)
-    return 100  -- Always allow restoration to 100%
-end
-
----Static helper function to calculate maximum restorable quality (always 100%)
----@param mechanicLevel number
----@return number maxQuality
-function REQ_ISRestoreEngineQuality.calculateMaxQuality(mechanicLevel)
-    return 100  -- Always allow restoration to 100%
-end
-
 ---Static helper function to calculate quality improvement per iteration
 ---@param mechanicLevel number
 ---@param engineRepairLevel number
 ---@return number qualityPerIteration
 function REQ_ISRestoreEngineQuality.calculateQualityPerIteration(mechanicLevel, engineRepairLevel)
     local skill = mechanicLevel - engineRepairLevel
-    local qualityPerIteration = 3 + (skill / 2)
-    if qualityPerIteration > 10 then qualityPerIteration = 10 end
+    local qualityPerIteration = 1 + (skill / 2)
+    if qualityPerIteration > 5 then qualityPerIteration = 5 end
     return qualityPerIteration
+end
+
+---Calculate loudness feature value to preserve original loudness after Java conversion
+---Java does: (int)(loudness / 2.7F), so we need to find input that results in desired output
+---@param targetLoudness number The desired final loudness value
+---@return number featureValue The loudness feature value to pass to setEngineFeature()
+function REQ_ISRestoreEngineQuality.calculateLoudnessFeature(targetLoudness)
+    local margin = math.min(1.0, math.max(0.1, targetLoudness * 0.0001))
+    return (targetLoudness * 2.7) + margin
 end
 
 ---Complete the engine quality restoration action
@@ -98,14 +93,14 @@ function REQ_ISRestoreEngineQuality:complete()
         -- Get configurable engine parts per iteration from mod options
         local partsPerIteration = REQ_ModOptions.getEnginePartsPerIteration()
         
-        local done = 0
+        local usedParts = 0
         local newQuality = currentQuality
         
         -- Use configurable engine parts per restoration iteration
         for i=1,numberOfParts,partsPerIteration do
             if numberOfParts - (i - 1) >= partsPerIteration then
                 newQuality = newQuality + qualityPerIteration
-                done = done + partsPerIteration
+                usedParts = usedParts + partsPerIteration
                 
                 if newQuality >= maxQuality then
                     newQuality = maxQuality
@@ -114,28 +109,36 @@ function REQ_ISRestoreEngineQuality:complete()
             end
         end
         
-        if done > 0 and newQuality > currentQuality then
-           local baseEnginePower = self.vehicle:getScript():getEngineForce()
+        if usedParts > 0 and newQuality > currentQuality then
+            local baseEnginePower = self.vehicle:getScript():getEngineForce()
             local currentEnginePower = self.vehicle:getEnginePower()
-            -- Multiply by 2.7 to compensate for Java setEngineFeature() dividing by 2.7F (see BaseVehicle#setEngineFeature() in BaseVehicle.java)
-            -- This keeps the engine loudness constant after repair
-            local engineLoudness = self.part:getVehicle():getEngineLoudness() * 2.7
+
+            print("[REQ] Script engine loudness: " .. self.vehicle:getScript():getEngineLoudness())
+            print("[REQ] Part vehicle engine loudness: " .. self.part:getVehicle():getEngineLoudness())
+            print("[REQ] SandboxVars.ZombieAttractionMultiplier: " .. tostring(SandboxVars.ZombieAttractionMultiplier or 1))
+            
+            -- Calculate feature value to preserve original loudness after Java conversion
+            local engineLoudness = self.vehicle:getEngineLoudness() -- self.part:getVehicle():getEngineLoudness()
+            local engineLoudnessAsFeature = REQ_ISRestoreEngineQuality.calculateLoudnessFeature(engineLoudness)
          
             -- Calculate new engine power based on quality
             local qualityBoosted = newQuality * 1.6
             if qualityBoosted > 100 then qualityBoosted = 100 end
             local qualityModifier = math.max(0.6, (qualityBoosted / 100))
             local newEnginePower = math.max(currentEnginePower, baseEnginePower * qualityModifier)
-            
+
             -- Update engine with new quality
-            self.vehicle:setEngineFeature(newQuality, engineLoudness, newEnginePower)
-            
+            self.vehicle:setEngineFeature(newQuality, engineLoudnessAsFeature, newEnginePower)
+            print("[REQ] Engine loudness change from " .. engineLoudness .. " to " .. self.vehicle:getEngineLoudness())
+            print("[REQ] Engine quality change from " .. currentQuality .. " to " .. self:getEngineQuality(self.part))
+            print("[REQ] Engine power change from " .. currentEnginePower .. " to " .. self.vehicle:getEnginePower())
+
             -- Remove used engine parts
-            local items = self.character:getInventory():RemoveAll('EngineParts', tonumber(done))
+            local items = self.character:getInventory():RemoveAll('EngineParts', tonumber(usedParts))
             sendRemoveItemsFromContainer(self.character:getInventory(), items)
             
             -- Grant XP (more than regular repair)
-            addXp(self.character, Perks.Mechanics, done * 3)
+            addXp(self.character, Perks.Mechanics, usedParts * 3)
             
             -- Transmit changes to other players
             self.vehicle:transmitEngine()
