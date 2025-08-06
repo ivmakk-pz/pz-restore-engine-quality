@@ -68,7 +68,7 @@ function REQ_Tooltips.buildRequirementsSection(requirementResults)
 end
 
 ---Build restoration details section for tooltip
----@param restorationDetails table
+---@param restorationDetails REQ_RestorationPlan
 ---@return table detailLines
 function REQ_Tooltips.buildRestorationDetailsSection(restorationDetails)
     local lines = {}
@@ -82,7 +82,6 @@ function REQ_Tooltips.buildRestorationDetailsSection(restorationDetails)
     
     -- Only show details if restoration will improve quality
     if restorationDetails.qualityIncrease > 0 then
-
         lines[#lines + 1] = "<LINE>"
         lines[#lines + 1] = color .. getText("IGUI_REQ_RestorationPreview") .. ":" .. " <LINE>"
         
@@ -103,7 +102,7 @@ function REQ_Tooltips.buildRestorationDetailsSection(restorationDetails)
         lines[#lines + 1] = color .. enginePartsText .. ": " .. restorationDetails.usedParts .. " / " .. restorationDetails.availableParts .. " used" .. " <LINE>"
 
         -- Efficiency
-        lines[#lines + 1] = color .. efficiencyText .. ": +" .. restorationDetails.qualityPerIteration .. "% / " .. restorationDetails.partsPerIteration .. " " .. enginePartsText .. " <LINE>"
+        lines[#lines + 1] = color .. efficiencyText .. ": " .. restorationDetails.qualityPerIteration .. "% / " .. restorationDetails.partsPerIteration .. " " .. enginePartsText .. " <LINE>"
     end
     
     return lines
@@ -118,7 +117,7 @@ end
 ---Create comprehensive tooltip for engine quality restoration
 ---@param option table
 ---@param requirementResults REQ_RequirementResults
----@param restorationDetails table?
+---@param restorationDetails REQ_RestorationPlan?
 function REQ_Tooltips.createRestoreEngineTooltip(option, requirementResults, restorationDetails)
     local tooltip = ISToolTip:new()
     tooltip:initialise()

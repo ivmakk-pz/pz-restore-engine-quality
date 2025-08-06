@@ -5,7 +5,7 @@
 local REQ_ISRestoreEngineQuality = require "REQ_ISRestoreEngineQuality"
 local REQ_Tooltips = require "REQ_Tooltips"
 local REQ_Requirements = require "REQ_Requirements"
-local REQ_ModOptions = require "REQ_ModOptions"
+local REQ_RestorationPlan = require "REQ_RestorationPlan"
 
 -- Create our override class for better mod compatibility
 local REQ_ISVehicleMechanics = {}
@@ -15,11 +15,11 @@ local REQ_ISVehicleMechanics = {}
 -- ===================================================================================================== --
 
 ---Generate context menu text with optional quality change preview
----@param restorationDetails table
+---@param restorationDetails REQ_RestorationPlan
 ---@return string menuText
 function REQ_ISVehicleMechanics.generateMenuText(restorationDetails)
     local restoreText = getText("IGUI_REQ_Restore")
-    local engineQualityText = getText("IGUI_Vehicle_EngineQuality")
+    local engineQualityText = getText("IGUI_Vehicle_EngineQuality"):gsub(": ", "")
     local menuText = restoreText .. " " .. engineQualityText .. " (" .. restorationDetails.currentQuality
     if restorationDetails.newQuality > restorationDetails.currentQuality then
         menuText = menuText .. " > " .. restorationDetails.newQuality
@@ -68,7 +68,7 @@ function REQ_ISVehicleMechanics.extendedDoPartContextMenu(self, part, x, y)
             local requirementResults = REQ_Requirements.validateAllRequirements(self.chr, part)
             
             -- Calculate restoration details for tooltip preview
-            local restorationDetails = REQ_ISRestoreEngineQuality.calculateRestorationDetails(self.chr, part)
+            local restorationDetails = REQ_RestorationPlan.calculateFromGameState(self.chr, part)
             
             -- Create context menu text with quality change preview (only show new value if it's bigger)
             local menuText = REQ_ISVehicleMechanics.generateMenuText(restorationDetails)
