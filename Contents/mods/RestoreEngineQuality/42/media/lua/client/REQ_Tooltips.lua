@@ -3,6 +3,7 @@
 -- ===================================================================================================== --
 
 local REQ_Tooltips = {}
+local REQ_Utils = require "REQ_Utils"
 
 -- ===================================================================================================== --
 -- TOOLTIP BUILDING FUNCTIONS
@@ -15,7 +16,7 @@ local REQ_Tooltips = {}
 ---@param requiredLevel number
 ---@return string requirementLine
 function REQ_Tooltips.buildSkillRequirementLine(hasRequirement, skillName, currentLevel, requiredLevel)
-    local color = hasRequirement and ISVehicleMechanics.ghs or ISVehicleMechanics.bhs
+    local color = REQ_Utils.getRequirementColor(hasRequirement)
     return " " .. color .. skillName .. " " .. currentLevel .. "/" .. requiredLevel .. " <LINE>"
 end
 
@@ -26,7 +27,7 @@ end
 ---@param requiredCount number
 ---@return string requirementLine
 function REQ_Tooltips.buildItemRequirementLine(hasRequirement, itemName, currentCount, requiredCount)
-    local color = hasRequirement and ISVehicleMechanics.ghs or ISVehicleMechanics.bhs
+    local color = REQ_Utils.getRequirementColor(hasRequirement)
     if hasRequirement then
         return " " .. color .. itemName .. " <LINE>"
     else
@@ -60,7 +61,49 @@ function REQ_Tooltips.buildRequirementsSection(requirementResults)
     -- Add key requirement if needed
     local keyReq = requirementResults.vehicleKey
     if not keyReq.met then
-        lines[#lines + 1] = " " .. ISVehicleMechanics.bhs .. keyReq.name .. " <LINE>"
+        lines[#lines + 1] = " " .. REQ_Utils.getRequirementColor(false) .. keyReq.name .. " <LINE>"
+    end
+    
+    return lines
+end
+
+---Build restoration details section for tooltip
+---@param restorationDetails table
+---@return table detailLines
+function REQ_Tooltips.buildRestorationDetailsSection(restorationDetails)
+    local lines = {}
+
+    local color = REQ_Utils.Colors.NEUTRAL
+    local enginePartsText = ScriptManager.instance:getItem("Base.EngineParts"):getDisplayName()
+    local engineQualityText = getText("IGUI_Vehicle_EngineQuality")
+    local enginePowerText = getText("IGUI_EnginePower")
+    local efficiencyText = getText("IGUI_REQ_Efficiency")
+
+    
+    -- Only show details if restoration will improve quality
+    if restorationDetails.qualityIncrease > 0 then
+
+        lines[#lines + 1] = "<LINE>"
+        lines[#lines + 1] = color .. getText("IGUI_REQ_RestorationPreview") .. ":" .. " <LINE>"
+        
+        -- Quality improvement
+        lines[#lines + 1] = color .. engineQualityText .. restorationDetails.currentQuality .. " > " .. restorationDetails.newQuality .. " (+" .. restorationDetails.qualityIncrease .. "%)" .. " <LINE>"
+        
+        -- Engine power improvement (only show if it would increase)
+        if restorationDetails.newEnginePower and restorationDetails.currentEnginePower and 
+           restorationDetails.newEnginePower > restorationDetails.currentEnginePower then
+            -- Divide by 10 for consistency with game UI display (like vanilla ISVehicleMechanics)
+            local currentPowerDisplay = math.floor(restorationDetails.currentEnginePower / 10)
+            local newPowerDisplay = math.floor(restorationDetails.newEnginePower / 10)
+            local powerIncrease = newPowerDisplay - currentPowerDisplay
+            lines[#lines + 1] = color .. enginePowerText .. ": " .. currentPowerDisplay .. " > " .. newPowerDisplay .. " (+" .. powerIncrease .. ") hp" .. " <LINE>"
+        end
+        
+        -- Parts consumption
+        lines[#lines + 1] = color .. enginePartsText .. ": " .. restorationDetails.usedParts .. " / " .. restorationDetails.availableParts .. " used" .. " <LINE>"
+
+        -- Efficiency
+        lines[#lines + 1] = color .. efficiencyText .. ": +" .. restorationDetails.qualityPerIteration .. "% / " .. restorationDetails.partsPerIteration .. " " .. enginePartsText .. " <LINE>"
     end
     
     return lines
@@ -75,7 +118,8 @@ end
 ---Create comprehensive tooltip for engine quality restoration
 ---@param option table
 ---@param requirementResults REQ_RequirementResults
-function REQ_Tooltips.createRestoreEngineTooltip(option, requirementResults)
+---@param restorationDetails table?
+function REQ_Tooltips.createRestoreEngineTooltip(option, requirementResults, restorationDetails)
     local tooltip = ISToolTip:new()
     tooltip:initialise()
     tooltip:setVisible(false)
@@ -87,6 +131,14 @@ function REQ_Tooltips.createRestoreEngineTooltip(option, requirementResults)
     local requirementLines = REQ_Tooltips.buildRequirementsSection(requirementResults)
     for i = 1, #requirementLines do
         parts[#parts + 1] = requirementLines[i]
+    end
+    
+    -- Restoration details section (if provided)
+    if restorationDetails then
+        local detailLines = REQ_Tooltips.buildRestorationDetailsSection(restorationDetails)
+        for i = 1, #detailLines do
+            parts[#parts + 1] = detailLines[i]
+        end
     end
     
     tooltip.description = table.concat(parts)

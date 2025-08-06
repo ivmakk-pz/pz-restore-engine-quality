@@ -2,6 +2,8 @@
 -- MOD OPTIONS FOR RESTORE ENGINE QUALITY
 -- ===================================================================================================== --
 
+local REQ_Utils = require "REQ_Utils"
+
 local REQ_ModOptions = {
     enginePartsPerIteration = nil,
 }
@@ -23,7 +25,7 @@ end
 ---Initialize mod options when the game starts
 function REQ_ModOptions.initialize()
     if not PZAPI or not PZAPI.ModOptions then
-        print("[REQ] ModOptions API not available, using default values")
+        REQ_Utils.logWarning("ModOptions API not available, using default values")
         return
     end
     

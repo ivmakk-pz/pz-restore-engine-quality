@@ -11,6 +11,24 @@ local REQ_ModOptions = require "REQ_ModOptions"
 local REQ_ISVehicleMechanics = {}
 
 -- ===================================================================================================== --
+-- HELPER FUNCTIONS
+-- ===================================================================================================== --
+
+---Generate context menu text with optional quality change preview
+---@param restorationDetails table
+---@return string menuText
+function REQ_ISVehicleMechanics.generateMenuText(restorationDetails)
+    local restoreText = getText("IGUI_REQ_Restore")
+    local engineQualityText = getText("IGUI_Vehicle_EngineQuality")
+    local menuText = restoreText .. " " .. engineQualityText .. " (" .. restorationDetails.currentQuality
+    if restorationDetails.newQuality > restorationDetails.currentQuality then
+        menuText = menuText .. " > " .. restorationDetails.newQuality
+    end
+    menuText = menuText .. ")"
+    return menuText
+end
+
+-- ===================================================================================================== --
 -- MAIN OVERRIDE FUNCTIONS  
 -- ===================================================================================================== --
 
@@ -49,12 +67,15 @@ function REQ_ISVehicleMechanics.extendedDoPartContextMenu(self, part, x, y)
             -- Validate all requirements
             local requirementResults = REQ_Requirements.validateAllRequirements(self.chr, part)
             
-            -- Always context meny option for engine restoration
-            local option = self.context:addOption("Restore Engine Quality (" .. engineQuality .. "%)", 
-                getPlayer(), ISVehicleMechanics.onRestoreEngineQuality, part)
+            -- Calculate restoration details for tooltip preview
+            local restorationDetails = REQ_ISRestoreEngineQuality.calculateRestorationDetails(self.chr, part)
             
-            -- Add comprehensive tooltip with requirement checking
-            REQ_Tooltips.createRestoreEngineTooltip(option, requirementResults)
+            -- Create context menu text with quality change preview (only show new value if it's bigger)
+            local menuText = REQ_ISVehicleMechanics.generateMenuText(restorationDetails)
+            local option = self.context:addOption(menuText, getPlayer(), ISVehicleMechanics.onRestoreEngineQuality, part)
+            
+            -- Add comprehensive tooltip with requirement checking and restoration preview
+            REQ_Tooltips.createRestoreEngineTooltip(option, requirementResults, restorationDetails)
 
             if not requirementResults:areAllRequirementsMet() then
                 option.notAvailable = true

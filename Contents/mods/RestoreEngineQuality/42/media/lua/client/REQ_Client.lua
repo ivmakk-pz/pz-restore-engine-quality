@@ -2,9 +2,9 @@
 -- Author: ivmakk
 -- Version: 1.0.0
 
--- Print mod loading message
 local vehicleMechanics = require "REQ_ISVehicleMechanics"
 local modOptions = require "REQ_ModOptions"
+local REQ_Utils = require "REQ_Utils"
 
 -- Main mod initialization
 local RestoreEngineQuality = {}
@@ -26,7 +26,7 @@ function RestoreEngineQuality.init()
     end)
     
     if not success then
-        print("[REQ] ERROR: " .. tostring(errorMsg))
+        REQ_Utils.logError(tostring(errorMsg))
     end
 
     -- Mark as initialized
