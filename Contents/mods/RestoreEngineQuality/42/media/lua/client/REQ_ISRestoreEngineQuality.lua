@@ -72,15 +72,8 @@ function REQ_ISRestoreEngineQuality:complete()
             local newEnginePower = restorationDetails.newEnginePower
             local currentEnginePower = restorationDetails.currentEnginePower
 
-            REQ_Utils.logDebug("Script engine loudness: " .. self.vehicle:getScript():getEngineLoudness())
-            REQ_Utils.logDebug("Part vehicle engine loudness: " .. self.part:getVehicle():getEngineLoudness())
-            REQ_Utils.logDebug("SandboxVars.ZombieAttractionMultiplier: " .. tostring(SandboxVars.ZombieAttractionMultiplier or 1))
-
             -- Update engine with new quality
             self.vehicle:setEngineFeature(newQuality, engineLoudnessAsFeature, newEnginePower)
-
-            REQ_Utils.logDebug("Engine quality change from " .. currentQuality .. " to " .. self:getEngineQuality(self.part))
-            REQ_Utils.logDebug("Engine power change from " .. currentEnginePower .. " to " .. self.vehicle:getEnginePower())
 
             -- Remove used engine parts
             local items = self.character:getInventory():RemoveAll('EngineParts', tonumber(usedParts))

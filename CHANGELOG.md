@@ -5,8 +5,8 @@
 ### Added
 - Initial project structure
 
-## [1.0.0] - 2025-08-03
+## [1.0.0] - 2025-08-07
 
 ### Added
 - Initial release
-- Engine quality restoration features
+- Restore your vehicle's engine quality with a Wrench, Spare Engine Parts, and Mechanical skill 4+

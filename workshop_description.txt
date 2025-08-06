@@ -1,4 +1,4 @@
-[b]Restore Engine Quality[/b] - Improve degraded vehicle engine quality beyond standard repair limits.
+Restore your vehicle's engine quality with a Wrench, Spare Engine Parts, and Mechanical skill 4+
 
 Unlike vanilla engine [i]condition[/i] (which affects durability), engine [i]quality[/i] determines starting reliability, power output, and cold weather performance. This mod lets you restore quality from any percentage up to 100%.
 
@@ -6,16 +6,15 @@ Unlike vanilla engine [i]condition[/i] (which affects durability), engine [i]qua
 [list]
 [*][b]Engine Quality Restoration[/b]: Improve quality from any percentage up to 100%
 [*][b]Skill-Based Mechanics[/b]: Higher Mechanics skill = better quality increases per iteration
-[*][b]Configurable Resource Cost[/b]: Adjust engine parts consumption (1-5 per restoration, default: 2)
-[*][b]Smart Integration[/b]: Seamless vehicle mechanics menu integration with mod compatibility
+[*][b]Configurable Resource Cost[/b]: Adjust engine parts consumption multiplier in Menu -> Options -> Mods -> Restore Engine Quality (1-5 per restoration, default: 2)
 [/list]
 
 [h2]How to Use[/h2]
-[b]Requirements:[/b] Wrench, Engine Parts, appropriate Mechanics skill level
-[b]Access:[/b] Right-click vehicle Engine → "Restore Engine Quality" [i](the same context menu where "Repair Engine" located)[/i]
+[b]Requirements:[/b] Wrench, Spare Engine Parts, appropriate Mechanics skill level (4+)
+[b]Access:[/b] Right-click vehicle Engine → Restore Engine Quality [i](the same context menu where "Repair Engine" located)[/i]
 [b]Process:[/b] Each restoration consumes engine parts and improves quality based on your skill
 
-[h2]Resource Cost:[/h2]
+[h2]Resource Cost[/h2]
 By default, requires 2x more Spare Engine Parts than regular engine repair (making it more challenging but not grindy). You can adjust this multiplier in mod options from 1x (same as repair) to 5x (very expensive).
 
 [h2]Engine Quality Effects[/h2]
@@ -44,9 +43,9 @@ Quality improvement per restoration:
 [h2]Compatibility[/h2]
 [list]
 [*]Build 42.10+
-[*]Compatible with most vehicle and mechanics mods
 [*]Safe to add/remove mid-game
+[*]Works with Vehicle Repair Overhaul and other popular vehicle and mechanics mods
 [/list]
 
 [h2]Feedback[/h2]
-Found a bug or have suggestions? Leave a comment!
+Found a bug or have suggestions? Leave a comment! I’d love to hear your thoughts and improve the mod further.

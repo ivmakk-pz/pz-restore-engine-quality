@@ -1,12 +1,5 @@
-# Workshop Update History
+v1.0.0 - 2025-08-07
 
-## Upload 1 - 2025-08-03
+Added
 - Initial release
-- Version 1.0.0
-
-## Template Notes:
-Track each workshop upload here with:
-- Date of upload
-- Version number
-- Brief description of changes
-- Any important notes for users
+- Restore your vehicle's engine quality with a Wrench, Spare Engine Parts, and Mechanical skill 4+
