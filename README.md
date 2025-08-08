@@ -1,5 +1,7 @@
 # Restore Engine Quality
 
+[![Steam Workshop](https://img.shields.io/badge/Steam%20Workshop-View-blue)](https://steamcommunity.com/sharedfiles/filedetails/?id=3543612325)
+
 A Project Zomboid mod that allows players to restore degraded vehicle engine quality beyond standard repair limits.
 
 ## Features
