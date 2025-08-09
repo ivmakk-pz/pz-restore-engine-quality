@@ -75,8 +75,9 @@ function REQ_ISRestoreEngineQuality:complete()
             -- Update engine with new quality
             self.vehicle:setEngineFeature(newQuality, engineLoudnessAsFeature, newEnginePower)
 
-            -- Remove used engine parts
-            local items = self.character:getInventory():RemoveAll('EngineParts', tonumber(usedParts))
+            -- Remove used engine parts from main inventory
+            -- (Parts should already be moved to main inventory before the action started)
+            local items = self.character:getInventory():RemoveAll('EngineParts', usedParts)
             sendRemoveItemsFromContainer(self.character:getInventory(), items)
             
             -- Grant XP (more than regular repair)
