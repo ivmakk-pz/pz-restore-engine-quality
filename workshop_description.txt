@@ -70,7 +70,7 @@ Unlike Easy Engine Rebuild, this mod gives you the ability to restore the engine
 [*]Safe to add/remove mid-game
 [*]Works with all vanilla vehicles
 [*]Works with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2757712197]Vehicle Repair Overhaul[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3387539308]AutoMechanics[/url] and other popular mechanics mods
-[*]Tested with [url=https://steamcommunity.com/workshop/filedetails/?id=3414495781]KI5[/url], Autotsar vehicles, and should work with most other vehicle mods as well  
+[*]Works with [url=https://steamcommunity.com/workshop/filedetails/?id=3414495781]KI5[/url], Autotsar vehicles, and should work with most other vehicle mods as well  
 (please let me know in the comments if you find any unsupported modded vehicle)
 [/list]
 

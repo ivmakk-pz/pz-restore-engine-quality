@@ -28,7 +28,6 @@ function REQ_ISVehicleMechanics.generateMenuText(restorationDetails)
     return menuText
 end
 
--- (moved consumption to timed action; no pre-transfer needed)
 
 -- ===================================================================================================== --
 -- MAIN OVERRIDE FUNCTIONS  
