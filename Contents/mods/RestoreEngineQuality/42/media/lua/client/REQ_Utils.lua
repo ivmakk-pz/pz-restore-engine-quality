@@ -78,4 +78,50 @@ function REQ_Utils.logDebug(message)
     logMessage(message, LOG_LEVELS.DEBUG)
 end
 
+-- ===================================================================================================== --
+-- INVENTORY HELPERS (RECURSIVE CONSUMPTION)
+-- ===================================================================================================== --
+
+---Consume up to `count` items of a given type from any container on the player (recursive)
+---@param playerObj IsoPlayer
+---@param itemType string
+---@param count integer
+---@return integer removed
+function REQ_Utils.consumeItemsByTypeRecurse(playerObj, itemType, count)
+    if count <= 0 then return 0 end
+    local removed = 0
+    local inv = playerObj:getInventory()
+    while removed < count do
+        local item = inv:getFirstTypeRecurse(itemType)
+        if not item then break end
+        local container = item:getContainer()
+        if not container then break end
+        container:Remove(item)
+        sendRemoveItemFromContainer(container, item)
+        removed = removed + 1
+    end
+    return removed
+end
+
+---Consume up to `count` items that match a predicate from any container on the player (recursive)
+---@param playerObj IsoPlayer
+---@param predicate fun(item: InventoryItem): boolean
+---@param count integer
+---@return integer removed
+function REQ_Utils.consumeItemsByEvalRecurse(playerObj, predicate, count)
+    if count <= 0 then return 0 end
+    local removed = 0
+    local inv = playerObj:getInventory()
+    while removed < count do
+        local item = inv:getFirstEvalRecurse(predicate)
+        if not item then break end
+        local container = item:getContainer()
+        if not container then break end
+        container:Remove(item)
+        sendRemoveItemFromContainer(container, item)
+        removed = removed + 1
+    end
+    return removed
+end
+
 return REQ_Utils

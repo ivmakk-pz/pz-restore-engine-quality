@@ -28,31 +28,7 @@ function REQ_ISVehicleMechanics.generateMenuText(restorationDetails)
     return menuText
 end
 
----Transfer EngineParts from bags to main inventory up to requiredCount
----@param playerObj IsoPlayer
----@param requiredCount integer
----@return integer movedCount
-function REQ_ISVehicleMechanics.transferEnginePartsToMain(playerObj, requiredCount)
-    if requiredCount <= 0 then return 0 end
-    local mainInventory = playerObj:getInventory()
-    local partsInMainInv = mainInventory:getNumberOfItem("EngineParts", false, false)
-    local partsNeededFromBags = math.max(0, requiredCount - partsInMainInv)
-    if partsNeededFromBags <= 0 then return 0 end
-
-    local moved = 0
-    local partsFromBags = mainInventory:getAllEvalRecurse(function(item)
-        return item:getType() == "EngineParts" and item:getContainer() ~= mainInventory
-    end)
-    if partsFromBags and partsFromBags:size() > 0 then
-        for i = 1, partsFromBags:size() do
-            if moved >= partsNeededFromBags then break end
-            local partItem = partsFromBags:get(i - 1)
-            ISVehiclePartMenu.toPlayerInventory(playerObj, partItem)
-            moved = moved + 1
-        end
-    end
-    return moved
-end
+-- (moved consumption to timed action; no pre-transfer needed)
 
 -- ===================================================================================================== --
 -- MAIN OVERRIDE FUNCTIONS  
@@ -113,22 +89,36 @@ end
 -- Custom callback method for engine quality restoration
 function REQ_ISVehicleMechanics.onRestoreEngineQuality(playerObj, part)
     local typeToItem = VehicleUtils.getItems(playerObj:getPlayerNum())
-    local item = typeToItem["Base.Wrench"] and typeToItem["Base.Wrench"][1]
+    local wrenchItem = typeToItem["Base.Wrench"] and typeToItem["Base.Wrench"][1]
     
-    if item then
-        ISVehiclePartMenu.toPlayerInventory(playerObj, item)
-
-        -- Calculate how many engine parts we'll need for restoration
-        local restorationDetails = REQ_RestorationPlan.calculateFromGameState(playerObj, part)
-        local usedParts = restorationDetails.usedParts
-        
-        -- Move required engine parts from bags to main inventory first (like vanilla)
-        if usedParts > 0 then
-            REQ_ISVehicleMechanics.transferEnginePartsToMain(playerObj, usedParts)
+    if wrenchItem then
+        if playerObj:getVehicle() then
+            ISVehicleMenu.onExit(playerObj)
         end
-        
+        ISVehiclePartMenu.toPlayerInventory(playerObj, wrenchItem)
+        -- Equip wrench in primary hand (optional but consistent with some vanilla actions)
+        ISInventoryPaneContextMenu.equipWeapon(wrenchItem, true, false, playerObj:getPlayerNum())
+
+        -- Path to work area first
         ISTimedActionQueue.add(ISPathFindAction:pathToVehicleArea(playerObj, part:getVehicle(), part:getArea()))
-        ISTimedActionQueue.add(REQ_ISRestoreEngineQuality:new(playerObj, part, item, 400))
+
+        -- Handle hood/engine cover like vanilla for consistency
+        local engineCover = nil
+        local doorPart = part:getVehicle():getPartById("EngineDoor")
+        if doorPart and doorPart:getDoor() and doorPart:getInventoryItem() and not doorPart:getDoor():isOpen() then
+            engineCover = doorPart
+        end
+
+        if engineCover then
+            if engineCover:getDoor():isLocked() and VehicleUtils.RequiredKeyNotFound(engineCover, playerObj) then
+                ISTimedActionQueue.add(ISUnlockVehicleDoor:new(playerObj, engineCover))
+            end
+            ISTimedActionQueue.add(ISOpenVehicleDoor:new(playerObj, part:getVehicle(), engineCover))
+            ISTimedActionQueue.add(REQ_ISRestoreEngineQuality:new(playerObj, part, wrenchItem, 400))
+            ISTimedActionQueue.add(ISCloseVehicleDoor:new(playerObj, part:getVehicle(), engineCover))
+        else
+            ISTimedActionQueue.add(REQ_ISRestoreEngineQuality:new(playerObj, part, wrenchItem, 400))
+        end
     end
 end
 

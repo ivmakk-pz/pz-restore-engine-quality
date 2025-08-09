@@ -75,10 +75,11 @@ function REQ_ISRestoreEngineQuality:complete()
             -- Update engine with new quality
             self.vehicle:setEngineFeature(newQuality, engineLoudnessAsFeature, newEnginePower)
 
-            -- Remove used engine parts from main inventory
-            -- (Parts should already be moved to main inventory before the action started)
-            local items = self.character:getInventory():RemoveAll('EngineParts', usedParts)
-            sendRemoveItemsFromContainer(self.character:getInventory(), items)
+            -- Consume required items recursively across all carried containers (avoid overweight pre-move)
+            local removed = REQ_Utils.consumeItemsByTypeRecurse(self.character, 'EngineParts', usedParts)
+            if removed < usedParts then
+                REQ_Utils.logWarning('Not enough EngineParts consumed: ' .. tostring(removed) .. ' / ' .. tostring(usedParts))
+            end
             
             -- Grant XP (more than regular repair)
             addXp(self.character, Perks.Mechanics, usedParts * 3)
