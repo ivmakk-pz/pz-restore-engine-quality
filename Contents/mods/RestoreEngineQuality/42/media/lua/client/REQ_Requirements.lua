@@ -5,6 +5,7 @@
 local REQ_Requirements = {}
 local REQ_RequirementResults = require "REQ_RequirementResults"
 local REQ_ModOptions = require "REQ_ModOptions"
+local REQ_Inventory = require "REQ_Inventory"
 
 -- ===================================================================================================== --
 -- REQUIREMENT CHECKING FUNCTIONS
@@ -28,7 +29,7 @@ end
 ---@return boolean hasWrench
 ---@return number count
 function REQ_Requirements.checkWrenchRequirement(character)
-    local hasWrench = character:getInventory():containsTypeRecurse("Wrench")
+    local hasWrench = REQ_Inventory.hasTypeRecurse(character, "Wrench")
     return hasWrench, hasWrench and 1 or 0
 end
 
@@ -40,7 +41,7 @@ end
 ---@return number requiredCount
 function REQ_Requirements.checkEnginePartsRequirement(character, requiredCount)
     requiredCount = requiredCount or REQ_ModOptions.getEnginePartsPerIteration()
-    local currentCount = character:getInventory():getNumberOfItem("EngineParts", false, true)
+    local currentCount = REQ_Inventory.countTypeRecurse(character, "EngineParts")
     return currentCount >= requiredCount, currentCount, requiredCount
 end
 

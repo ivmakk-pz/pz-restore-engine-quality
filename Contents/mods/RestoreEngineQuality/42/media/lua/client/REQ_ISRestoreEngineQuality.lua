@@ -2,6 +2,7 @@ require "TimedActions/ISBaseTimedAction"
 
 local REQ_Requirements = require "REQ_Requirements"
 local REQ_Utils = require "REQ_Utils"
+local REQ_Inventory = require "REQ_Inventory"
 local REQ_RestorationPlan = require "REQ_RestorationPlan"
 
 ---@class REQ_ISRestoreEngineQuality : ISBaseTimedAction
@@ -70,13 +71,12 @@ function REQ_ISRestoreEngineQuality:complete()
             -- Use pre-calculated loudness feature and engine power from restoration details
             local engineLoudnessAsFeature = restorationDetails.engineLoudnessFeature
             local newEnginePower = restorationDetails.newEnginePower
-            local currentEnginePower = restorationDetails.currentEnginePower
 
             -- Update engine with new quality
             self.vehicle:setEngineFeature(newQuality, engineLoudnessAsFeature, newEnginePower)
 
             -- Consume required items recursively across all carried containers (avoid overweight pre-move)
-            local removed = REQ_Utils.consumeItemsByTypeRecurse(self.character, 'EngineParts', usedParts)
+            local removed = REQ_Inventory.consumeItemsByTypeRecurse(self.character, 'EngineParts', usedParts)
             if removed < usedParts then
                 REQ_Utils.logWarning('Not enough EngineParts consumed: ' .. tostring(removed) .. ' / ' .. tostring(usedParts))
             end

@@ -81,12 +81,9 @@ function REQ_RestorationPlan:new(currentQuality, newQuality, qualityIncrease, us
     return o
 end
 
----Calculate restoration details from current game state
----@param character IsoPlayer
----@param part VehiclePart
----@return REQ_RestorationPlan
 function REQ_RestorationPlan.calculateFromGameState(character, part)
-    local numberOfParts = character:getInventory():getNumberOfItem("EngineParts", false, true)
+    local REQ_Inventory = require "REQ_Inventory"
+    local numberOfParts = REQ_Inventory.countTypeRecurse(character, "EngineParts")
     local currentQuality = part:getVehicle():getEngineQuality()
     local mechanicLevel = character:getPerkLevel(Perks.Mechanics)
     local maxQuality = 100
