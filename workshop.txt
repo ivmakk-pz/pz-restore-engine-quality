@@ -5,17 +5,26 @@ description=Restore your vehicle's engine quality with a Wrench, Spare Engine Pa
 description=
 description=Unlike vanilla engine [i]condition[/i] (which affects durability), engine [i]quality[/i] determines starting reliability, power output, and cold weather performance. This mod lets you restore quality from any percentage up to 100%.
 description=
+description=[h2]Why Use This Mod?[/h2]
+description=[list]
+description=[*]Have you ever found a great military vehicle, but its engine quality is completely ruined?
+description=[*]Have you already repaired and fully upgraded a car for long trips, but starting the engine still requires minutes of attempts?
+description=[*]Then this mod is for you - restore the engine to its day-one state, just like it was set from the factory.
+description=[/list]
+description=
 description=[h2]Key Features[/h2]
 description=[list]
 description=[*][b]Engine Quality Restoration[/b]: Improve quality from any percentage up to 100%
-description=[*][b]Skill-Based Mechanics[/b]: Higher Mechanics skill = better quality increases per iteration
+description=[*][b]Skill-Based Mechanics[/b]: Higher Mechanics skill = better quality increases per iteration (just like vanilla [url=https://pzwiki.net/wiki/Engine#Repairing]engine repairing[/url] works)
 description=[*][b]Configurable Resource Cost[/b]: Adjust engine parts consumption multiplier in Menu -> Options -> Mods -> Restore Engine Quality (1-5 per restoration, default: 2)
 description=[/list]
 description=
 description=[h2]How to Use[/h2]
-description=[b]Requirements:[/b] Wrench, Spare Engine Parts, appropriate Mechanics skill level (4+)
-description=[b]Access:[/b] Right-click vehicle Engine ? Restore Engine Quality [i](the same context menu where "Repair Engine" located)[/i]
-description=[b]Process:[/b] Each restoration consumes engine parts and improves quality based on your skill
+description=[list]
+description=[*][b]Requirements:[/b] Wrench, Spare Engine Parts, appropriate Mechanics skill level (4+)
+description=[*][b]Access:[/b] Right-click vehicle Engine ? Restore Engine Quality [i](the same context menu where "Repair Engine" located)[/i]
+description=[*][b]Process:[/b] Each restoration consumes engine parts and improves quality based on your skill
+description=[/list]
 description=
 description=[h2]Resource Cost[/h2]
 description=By default, requires 2x more Spare Engine Parts than regular engine repair (making it more challenging but not grindy). You can adjust this multiplier in mod options from 1x (same as repair) to 5x (very expensive).
@@ -27,10 +36,20 @@ description=[*][b]Engine Power[/b]: Higher quality = more horsepower and perform
 description=[*][b]Cold Weather Starting[/b]: Quality ?65% struggles in cold weather
 description=[/list]
 description=
-description=[h2]Mechanics Table[/h2]
-description=Quality improvement per restoration:
+description=[h2]Requirements[/h2]
+description=[list]
+description=[*][url=https://pzwiki.net/wiki/Wrench]Wrench[/url]
+description=[*][url=https://pzwiki.net/wiki/Spare_Engine_Parts]Spare Engine Parts[/url]
+description=[*]Minimal [url=https://pzwiki.net/wiki/Mechanics]Mechanics[/url] level 4/5/6 for standard/heavy-duty/sports vehicles respectively.
+description=[/list]
 description=
-description=[code]1 + (<Mechanics Level> - <Required Level>) / 2[/code] (max 5%)
+description=The percentage each (2) engine parts restore depends on your mechanics skill and car type (modded vehicles can use their own required mechanics level).
+description=
+description=For example, at level 10 mechanics, 50 spare engine parts will restore a standard car's engine quality from 0% to 100%.
+description=
+description=Based on your Mechanics level, each 2 Spare Engine Parts will restore 1-5% Engine Quality.
+description=
+description=[code]1 + (<Mechanics Level> - <Required Level>) / 2[/code]
 description=
 description=[table]
 description=[tr][td][b]Mechanics Level[/b][/td][td][b]Standard Cars[/b][/td][td][b]Heavy-Duty Cars[/b][/td][td][b]Sports Cars[/b][/td][/tr]
@@ -43,11 +62,19 @@ description=[tr][td]9[/td][td]3%[/td][td]3%[/td][td]2%[/td][/tr]
 description=[tr][td]10[/td][td]4%[/td][td]3%[/td][td]3%[/td][/tr]
 description=[/table]
 description=
+description=[h2]Motivation[/h2]
+description=Inspired by [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2577243435]Easy Engine Rebuild[/url] (B41 only), but fully developed from scratch as a new mod with a focus on a lore-friendly way to restore the engine.
+description=
+description=Unlike Easy Engine Rebuild, this mod gives you the ability to restore the engine iteratively, similar to how vanilla engine repair works.
+description=
 description=[h2]Compatibility[/h2]
 description=[list]
 description=[*]Build 42.10+
 description=[*]Safe to add/remove mid-game
-description=[*]Works with Vehicle Repair Overhaul and other popular vehicle and mechanics mods
+description=[*]Works with all vanilla vehicles
+description=[*]Works with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2757712197]Vehicle Repair Overhaul[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3387539308]AutoMechanics[/url] and other popular mechanics mods
+description=[*]Works with [url=https://steamcommunity.com/workshop/filedetails/?id=3414495781]KI5[/url], Autotsar vehicles, and should work with most other vehicle mods as well  
+description=(please let me know in the comments if you find any unsupported modded vehicle)
 description=[/list]
 description=
 description=[h2]Feedback[/h2]
