@@ -1,17 +1,8 @@
---
--- Created by IntelliJ IDEA.
--- User: RJ
--- Date: 22/09/2017
--- Time: 11:06
--- To change this template use File | Settings | File Templates.
---
-
 ISVehicleMechanics = ISCollapsableWindow:derive("ISVehicleMechanics");
 ISVehicleMechanics.alphaOverlay = 1;
 ISVehicleMechanics.alphaOverlayInc = true;
 ISVehicleMechanics.tooltip = nil;
--- disable mechanics cheat for non-debug
-ISVehicleMechanics.cheat = getDebug();
+ISVehicleMechanics.cheat = false;
 ISVehicleMechanics.ghs = "<GHC>"
 ISVehicleMechanics.bhs = "<BHC>"
 
@@ -343,7 +334,7 @@ function ISVehicleMechanics:doPartContextMenu(part, x,y)
 	end
 	
 	if part:getId() == "lightbar" then
-		if part:getCondition() < 100 and self.chr:getInventory():containsTag("Lightbar") and self.chr:getPerkLevel(Perks.Mechanics) >= part:getVehicle():getScript():getEngineRepairLevel() and screwdriver then
+		if part:getCondition() < 100 and self.chr:getInventory():containsTag(ItemTag.LIGHTBAR) and self.chr:getPerkLevel(Perks.Mechanics) >= part:getVehicle():getScript():getEngineRepairLevel() and screwdriver then
 			local option = self.context:addOption(getText("ContextMenu_Repair"), playerObj, ISVehicleMechanics.onRepairLightbar, part);
 			self:doMenuTooltip(part, option, "repairlightbar");
 		else
@@ -374,8 +365,7 @@ function ISVehicleMechanics:doPartContextMenu(part, x,y)
 		end
 	end
 --]]
-	-- disable mechanics cheat for non-debug
-	if getDebug() and (ISVehicleMechanics.cheat or (isClient() and isAdmin())) then
+	if ISVehicleMechanics.cheat then
 		if self.vehicle:getPartById("Engine") then
 			option = self.context:addOption("CHEAT: Get Key", playerObj, ISVehicleMechanics.onCheatGetKey, self.vehicle)
 			if self.vehicle:isHotwired() then
@@ -423,8 +413,8 @@ function ISVehicleMechanics.onRepairEngine(playerObj, part)
 		ISVehicleMenu.onExit(playerObj)
 	end
 	
-	local typeToItem = VehicleUtils.getItems(playerObj:getPlayerNum())
-	local item = typeToItem["Base.Wrench"][1]
+	local typeToItem,tagToItem = VehicleUtils.getItems(playerObj:getPlayerNum())
+	local item = tagToItem[ItemTag.WRENCH][1]
 	ISVehiclePartMenu.toPlayerInventory(playerObj, item)
 	local parts = playerObj:getInventory():getFirstTypeRecurse("EngineParts");
 	ISVehiclePartMenu.toPlayerInventory(playerObj, parts)	
@@ -456,7 +446,7 @@ function ISVehicleMechanics.onRepairLightbar(playerObj, part)
 		ISVehicleMenu.onExit(playerObj)
 	end
 	
-	local item = playerObj:getInventory():getFirstTag("Lightbar");
+	local item = playerObj:getInventory():getFirstTag(ItemTag.LIGHTBAR);
 	ISVehiclePartMenu.toPlayerInventory(playerObj, item)
 	
 	--ISTimedActionQueue.add(ISPathFindAction:pathToVehicleArea(playerObj, part:getVehicle(), part:getArea()))
@@ -468,8 +458,8 @@ function ISVehicleMechanics.onTakeEngineParts(playerObj, part)
 		ISVehicleMenu.onExit(playerObj)
 	end
 	
-	local typeToItem = VehicleUtils.getItems(playerObj:getPlayerNum())
-	local item = typeToItem["Base.Wrench"][1]
+	local typeToItem,tagToItem = VehicleUtils.getItems(playerObj:getPlayerNum())
+	local item = tagToItem[ItemTag.WRENCH][1]
 	ISVehiclePartMenu.toPlayerInventory(playerObj, item)
 	
 	ISTimedActionQueue.add(ISPathFindAction:pathToVehicleArea(playerObj, part:getVehicle(), part:getArea()))
@@ -624,7 +614,7 @@ function ISVehicleMechanics.onCheatToggle(playerObj)
 	ISVehicleMechanics.cheat = not ISVehicleMechanics.cheat
 	playerObj:setMechanicsCheat(ISVehicleMechanics.cheat)
 	if isClient() then
-	    sendPlayerExtraInfo(playerObj)
+		sendPlayerExtraInfo(playerObj)
 	end
 end
 
@@ -704,7 +694,7 @@ function ISVehicleMechanics:doMenuTooltip(part, option, lua, name)
 		else
 			tooltip.description = tooltip.description .. " " .. ISVehicleMechanics.ghs .. getItemDisplayName("Base.Screwdriver") .. " 1/1 <LINE>";
 		end
-		if not self.chr:getInventory():containsTag("Lightbar") then
+		if not self.chr:getInventory():containsTag(ItemTag.LIGHTBAR) then
 			tooltip.description = tooltip.description .. " " .. ISVehicleMechanics.bhs .. getText("IGUI_VehiclePartlightbar") .. " 0/1 <LINE>";
 		else
 			tooltip.description = tooltip.description .. " " .. ISVehicleMechanics.ghs .. getText("IGUI_VehiclePartlightbar") .. " 1/1 <LINE>";
@@ -806,7 +796,7 @@ function ISVehicleMechanics:doMenuTooltip(part, option, lua, name)
 	end
 	local seatNumber = part:getContainerSeatNumber()
 	local seatOccupied = (seatNumber ~= -1) and vehicle:isSeatOccupied(seatNumber)
-	if keyvalues.requireEmpty and (round(part:getContainerContentAmount(), 3) > 0 or seatOccupied) then
+	if keyvalues.requireEmpty and (round(part:getContainerContentAmount(), 3) > 0 or seatOccupied or (part:getItemContainer() and not part:getItemContainer():isEmpty())) then
 		tooltip.description = tooltip.description .. " " .. ISVehicleMechanics.bhs .. " " .. getText("Tooltip_vehicle_needempty", getText("IGUI_VehiclePart" .. part:getId())) .. " <LINE> ";
 	end
 	-- install stuff
@@ -1023,8 +1013,7 @@ function ISVehicleMechanics:onRightMouseUp(x, y)
 	if part then
 		self:selectPart(part)
 		self:doPartContextMenu(part, x, y)
-	-- disable mechanics cheat for non-debug
-	elseif getDebug() and (ISVehicleMechanics.cheat or (isClient() and isAdmin())) then
+	elseif ISVehicleMechanics.cheat then
 		if UIManager.getSpeedControls():getCurrentGameSpeed() == 0 then return; end
 		self.context = ISContextMenu.get(self.playerNum, x + self:getAbsoluteX(), y + self:getAbsoluteY())
 		if self.vehicle:getScript() and self.vehicle:getScript():getWheelCount() > 0 then
@@ -1560,15 +1549,15 @@ ISVehicleMechanics.OnMechanicActionDone = function(chr, success)
 end
 
 function ISVehicleMechanics:getWrench(player)
-	return player:getInventory():getFirstTypeEvalRecurse("Wrench", predicateNotBroken)
+	return player:getInventory():getFirstTagEvalRecurse(ItemTag.WRENCH, predicateNotBroken)
 end
 
 function ISVehicleMechanics:getScrewdriver(player)
-	return player:getInventory():getFirstTagEvalRecurse("Screwdriver", predicateNotBroken)
+	return player:getInventory():getFirstTagEvalRecurse(ItemTag.SCREWDRIVER, predicateNotBroken)
 end
 
 function ISVehicleMechanics:getTirePump(player)
-	return player:getInventory():getFirstTypeRecurse("TirePump")
+	return player:getInventory():getFirstTypeRecurse(ItemKey.Normal.TIRE_PUMP)
 end
 
 Events.OnMechanicActionDone.Add(ISVehicleMechanics.OnMechanicActionDone);
