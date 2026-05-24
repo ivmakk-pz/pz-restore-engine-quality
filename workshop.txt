@@ -21,8 +21,8 @@ description=[/list]
 description=
 description=[h2]How to Use[/h2]
 description=[list]
-description=[*][b]Requirements:[/b] Wrench, Spare Engine Parts, appropriate Mechanics skill level (4+)
-description=[*][b]Access:[/b] Right-click vehicle Engine ? Restore Engine Quality [i](the same context menu where "Repair Engine" located)[/i]
+description=[*][b]Requirements:[/b] Wrench (or Ratchet Wrench), Spare Engine Parts, appropriate Mechanics skill level (4+)
+description=[*][b]Access:[/b] Right-click vehicle Engine → Restore Engine Quality [i](the same context menu where "Repair Engine" located)[/i]
 description=[*][b]Process:[/b] Each restoration consumes engine parts and improves quality based on your skill
 description=[/list]
 description=
@@ -33,12 +33,12 @@ description=[h2]Engine Quality Effects[/h2]
 description=[list]
 description=[*][b]Starting Reliability[/b]: Lower quality = higher chance to fail starting
 description=[*][b]Engine Power[/b]: Higher quality = more horsepower and performance
-description=[*][b]Cold Weather Starting[/b]: Quality ?65% struggles in cold weather
+description=[*][b]Cold Weather Starting[/b]: Quality ≤65% struggles in cold weather
 description=[/list]
 description=
 description=[h2]Requirements[/h2]
 description=[list]
-description=[*][url=https://pzwiki.net/wiki/Wrench]Wrench[/url]
+description=[*][url=https://pzwiki.net/wiki/Wrench]Wrench[/url] (or any WRENCH-tagged tool, e.g. Ratchet Wrench)
 description=[*][url=https://pzwiki.net/wiki/Spare_Engine_Parts]Spare Engine Parts[/url]
 description=[*]Minimal [url=https://pzwiki.net/wiki/Mechanics]Mechanics[/url] level 4/5/6 for standard/heavy-duty/sports vehicles respectively.
 description=[/list]
@@ -69,7 +69,7 @@ description=Unlike Easy Engine Rebuild, this mod gives you the ability to restor
 description=
 description=[h2]Compatibility[/h2]
 description=[list]
-description=[*]Build 42.10+
+description=[*]Supported builds: 42.17+ (tested on b42.18.0 SP)
 description=[*]Safe to add/remove mid-game
 description=[*]Works with all vanilla vehicles
 description=[*]Works with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2757712197]Vehicle Repair Overhaul[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3387539308]AutoMechanics[/url] and other popular mechanics mods
@@ -78,6 +78,7 @@ description=(please let me know in the comments if you find any unsupported modd
 description=[/list]
 description=
 description=[h2]Feedback[/h2]
-description=Found a bug or have suggestions? Leave a comment! I�d love to hear your thoughts and improve the mod further.
+description=Found a bug or have suggestions? Leave a comment! I’d love to hear your thoughts and improve the mod further.
+description=[img]https://i.imgur.com/MKy1gMX.gif[/img]
 tags=Build 42;Balance;Vehicles;QoL
 visibility=public
