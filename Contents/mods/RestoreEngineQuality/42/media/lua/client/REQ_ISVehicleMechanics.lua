@@ -61,7 +61,7 @@ function REQ_ISVehicleMechanics.extendedDoPartContextMenu(self, part, x, y)
     end
     
     -- Add our custom option for engine quality restoration
-    if part:getId() == "Engine" and not VehicleUtils.RequiredKeyNotFound(part, self.chr) then
+    if part:getId() == "Engine" then
         local engineQuality = part:getVehicle():getEngineQuality()
         
         if engineQuality < 100 then
@@ -87,8 +87,8 @@ end
 
 -- Custom callback method for engine quality restoration
 function REQ_ISVehicleMechanics.onRestoreEngineQuality(playerObj, part)
-    local typeToItem = VehicleUtils.getItems(playerObj:getPlayerNum())
-    local wrenchItem = typeToItem["Base.Wrench"] and typeToItem["Base.Wrench"][1]
+    local typeToItem, tagToItem = VehicleUtils.getItems(playerObj:getPlayerNum())
+    local wrenchItem = tagToItem[ItemTag.WRENCH] and tagToItem[ItemTag.WRENCH][1]
     
     if wrenchItem then
         if playerObj:getVehicle() then

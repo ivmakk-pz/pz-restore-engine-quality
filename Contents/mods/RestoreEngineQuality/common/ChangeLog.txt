@@ -1,0 +1,27 @@
+[ v1.0.0 - 2025-08-07 ]
+Added:
+- Restore your vehicle's engine quality with a Wrench, Spare Engine Parts, and Mechanical skill 4+
+[ ------ ]
+
+[ v1.1.0 - 2025-08-09 ]
+Added:
+- Auto-open vehicle hood when starting engine restoration
+- Auto-equip Wrench when required
+Fixed:
+- Engine parts in containers (e.g., bags) outside the main inventory were not consumed
+[ ------ ]
+
+[ v1.2.0 - 2026-05-24 ]
+Changed:
+- Updated for Build 42.17+
+- Wrench detection now supports Ratchet Wrench and other WRENCH-tagged tools
+- Multiplayer compatibility improvements
+- Restore option now visible without vehicle key (greyed out when requirements unmet)
+Fixed:
+- Multiplayer error with timed action
+- Mechanics UI not flashing after restoration
+- Player carry weight not updating after consuming engine parts
+- WRENCH-tagged tools not recognized
+Added:
+- ChangeLog.txt for "Mod Update and Alert System" and "[B42] Mod Manager" compatibility
+[ ------ ]

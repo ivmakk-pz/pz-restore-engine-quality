@@ -18,7 +18,7 @@ Unlike vanilla engine [i]condition[/i] (which affects durability), engine [i]qua
 
 [h2]How to Use[/h2]
 [list]
-[*][b]Requirements:[/b] Wrench, Spare Engine Parts, appropriate Mechanics skill level (4+)
+[*][b]Requirements:[/b] Wrench (or Ratchet Wrench), Spare Engine Parts, appropriate Mechanics skill level (4+)
 [*][b]Access:[/b] Right-click vehicle Engine → Restore Engine Quality [i](the same context menu where "Repair Engine" located)[/i]
 [*][b]Process:[/b] Each restoration consumes engine parts and improves quality based on your skill
 [/list]
@@ -35,7 +35,7 @@ By default, requires 2x more Spare Engine Parts than regular engine repair (maki
 
 [h2]Requirements[/h2]
 [list]
-[*][url=https://pzwiki.net/wiki/Wrench]Wrench[/url]
+[*][url=https://pzwiki.net/wiki/Wrench]Wrench[/url] (or any WRENCH-tagged tool, e.g. Ratchet Wrench)
 [*][url=https://pzwiki.net/wiki/Spare_Engine_Parts]Spare Engine Parts[/url]
 [*]Minimal [url=https://pzwiki.net/wiki/Mechanics]Mechanics[/url] level 4/5/6 for standard/heavy-duty/sports vehicles respectively.
 [/list]
@@ -66,7 +66,7 @@ Unlike Easy Engine Rebuild, this mod gives you the ability to restore the engine
 
 [h2]Compatibility[/h2]
 [list]
-[*]Build 42.10+
+[*]Supported builds: 42.17+ (tested on b42.18.0 SP)
 [*]Safe to add/remove mid-game
 [*]Works with all vanilla vehicles
 [*]Works with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2757712197]Vehicle Repair Overhaul[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3387539308]AutoMechanics[/url] and other popular mechanics mods
@@ -76,6 +76,4 @@ Unlike Easy Engine Rebuild, this mod gives you the ability to restore the engine
 
 [h2]Feedback[/h2]
 Found a bug or have suggestions? Leave a comment! I’d love to hear your thoughts and improve the mod further.
-
-Workshop ID: 3543612325
-Mod ID: Ivmakk_RestoreEngineQuality
+[img]https://i.imgur.com/MKy1gMX.gif[/img]

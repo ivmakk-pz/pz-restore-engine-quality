@@ -7,6 +7,10 @@ local REQ_RequirementResults = require "REQ_RequirementResults"
 local REQ_ModOptions = require "REQ_ModOptions"
 local REQ_Inventory = require "REQ_Inventory"
 
+local function predicateNotBroken(item)
+    return not item:isBroken()
+end
+
 -- ===================================================================================================== --
 -- REQUIREMENT CHECKING FUNCTIONS
 -- ===================================================================================================== --
@@ -29,8 +33,8 @@ end
 ---@return boolean hasWrench
 ---@return number count
 function REQ_Requirements.checkWrenchRequirement(character)
-    local hasWrench = REQ_Inventory.hasTypeRecurse(character, "Wrench")
-    return hasWrench, hasWrench and 1 or 0
+    local wrench = character:getInventory():getFirstTagEvalRecurse(ItemTag.WRENCH, predicateNotBroken)
+    return wrench ~= nil, wrench and 1 or 0
 end
 
 ---Check if enough engine parts are available

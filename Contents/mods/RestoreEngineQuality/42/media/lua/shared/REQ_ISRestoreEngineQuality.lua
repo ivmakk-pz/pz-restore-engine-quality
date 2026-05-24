@@ -87,7 +87,7 @@ function REQ_ISRestoreEngineQuality:complete()
             -- Transmit changes to other players
             self.vehicle:transmitEngine()
             
-            self.character:sendObjectChange('mechanicActionDone', { success = true })
+            self.character:sendObjectChange(IsoObjectChange.MECHANIC_ACTION_DONE, { success = true })
         end
     end
     

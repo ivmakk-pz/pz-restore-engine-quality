@@ -41,5 +41,14 @@ Quality improvement per restoration = `1 + (Mechanics Level - Required Level) / 
 
 ## Requirements
 
-- Project Zomboid Build 42+
+- Project Zomboid Build 42.17+
 - Compatible with most vehicle and mechanics mods
+
+## Debug / Testing
+
+Enable debug mode in PZ, open Vehicle Mechanics panel, click `ISVehicleMechanics.cheat=true` at the top to enable cheat options. Then RMB on Engine to access "CHEAT: Get Key" for a vehicle key.
+
+**Set engine quality to 30% via Lua console** (stand next to car):
+```
+local v = getPlayer():getNearVehicle(); if v then local p = v:getScript():getEngineForce() * 0.6; v:setEngineFeature(30, v:getEngineLoudness(), p); v:transmitEngine() end
+```

@@ -33,7 +33,7 @@ function REQ_Inventory.consumeItemsByTypeRecurse(playerObj, itemType, count)
         if not item then break end
         local container = item:getContainer()
         if not container then break end
-        container:Remove(item)
+        container:DoRemoveItem(item)
         sendRemoveItemFromContainer(container, item)
         removed = removed + 1
     end

@@ -34,14 +34,15 @@ function REQ_ModOptions.initialize()
     
     -- Add engine parts per iteration slider
     REQ_ModOptions.enginePartsPerIteration = options:addSlider(
-        "enginePartsPerIteration",  
+        "enginePartsPerIteration",
         getText("UI_options_REQ_enginePartsPerIteration"),
         1,    -- minimum value
-        5,    -- maximum value  
+        5,    -- maximum value
         1,    -- step
         2,    -- default value
         getText("UI_options_REQ_enginePartsPerIteration_tooltip")
     )
+    options:addDescription(getText("UI_options_REQ_enginePartsPerIteration_tooltip"))
 end
 
 return REQ_ModOptions

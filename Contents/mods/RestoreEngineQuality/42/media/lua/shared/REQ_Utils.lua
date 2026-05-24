@@ -3,7 +3,7 @@
 -- ===================================================================================================== --
 
 -- DEBUG MODE TOGGLE: Set to false for production safety mode
-local DEBUG_MODE = true
+local DEBUG_MODE = false
 
 -- Log level constants
 local LOG_LEVELS = {
