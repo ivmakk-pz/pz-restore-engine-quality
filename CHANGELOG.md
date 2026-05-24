@@ -2,8 +2,26 @@
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-05-24
+
+### Changed
+- Updated for Build 42.17+ (dropped legacy 42.12 support)
+- Wrench detection now uses item tags instead of type string, supporting Ratchet Wrench and other WRENCH-tagged tools
+- Engine parts removal now uses DoRemoveItem for proper weight recalculation
+- Moved timed action and core logic to shared Lua scope for multiplayer compatibility
+- Migrated sendObjectChange to IsoObjectChange enum
+- Localization files switched to JSON format (Build 42.15+ standard)
+- Restore option now visible without vehicle key (greyed out with requirements tooltip instead of hidden)
+- Shortened mod options description for better readability
+
+### Fixed
+- Multiplayer error "no such function ISRestoreEngineQuality.new" caused by timed action in client-only scope
+- Mechanics UI not flashing success/failure after restoration due to string-based sendObjectChange
+- Player carry weight not updating after consuming engine parts
+- Ratchet Wrench and other WRENCH-tagged tools not recognized for restoration requirement
+
 ### Added
-- Initial project structure
+- ChangeLog.txt for compatibility with "Mod Update and Alert System" and "[B42] Mod Manager" mods
 
 ## [1.1.0] - 2025-08-09
 
