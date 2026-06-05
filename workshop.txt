@@ -3,7 +3,7 @@ id=3543612325
 title=Restore Engine Quality [B42]
 description=Restore your vehicle's engine quality with a Wrench, Spare Engine Parts, and Mechanical skill 4+
 description=
-description=Unlike vanilla engine [i]condition[/i] (which affects durability), engine [i]quality[/i] determines starting reliability, power output, and cold weather performance. This mod lets you restore quality from any percentage up to 100%.
+description=Unlike vanilla engine [i]condition[/i] (which affects durability), engine [i]quality[/i] determines starting reliability, fuel efficiency, and cold weather performance. This mod lets you restore quality from any percentage up to 100%.
 description=
 description=[h2]Why Use This Mod?[/h2]
 description=[list]
@@ -32,8 +32,9 @@ description=
 description=[h2]Engine Quality Effects[/h2]
 description=[list]
 description=[*][b]Starting Reliability[/b]: Lower quality = higher chance to fail starting
-description=[*][b]Engine Power[/b]: Higher quality = more horsepower and performance
+description=[*][b]Fuel Efficiency[/b]: Lower quality = up to 50% more fuel consumption
 description=[*][b]Cold Weather Starting[/b]: Quality ≤65% struggles in cold weather
+description=[*][b]Engine Power[/b]: Higher quality = more horsepower (affects reverse speed)
 description=[/list]
 description=
 description=[h2]Requirements[/h2]
@@ -69,7 +70,7 @@ description=Unlike Easy Engine Rebuild, this mod gives you the ability to restor
 description=
 description=[h2]Compatibility[/h2]
 description=[list]
-description=[*]Supported builds: 42.17+ (tested on b42.18.0 SP)
+description=[*]Supported builds: 42.17+ (tested on b42.19.0 SP)
 description=[*]Safe to add/remove mid-game
 description=[*]Works with all vanilla vehicles
 description=[*]Works with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2757712197]Vehicle Repair Overhaul[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3387539308]AutoMechanics[/url] and other popular mechanics mods

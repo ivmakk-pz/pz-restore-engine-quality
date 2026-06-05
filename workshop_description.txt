@@ -1,6 +1,6 @@
 Restore your vehicle's engine quality with a Wrench, Spare Engine Parts, and Mechanical skill 4+
 
-Unlike vanilla engine [i]condition[/i] (which affects durability), engine [i]quality[/i] determines starting reliability, power output, and cold weather performance. This mod lets you restore quality from any percentage up to 100%.
+Unlike vanilla engine [i]condition[/i] (which affects durability), engine [i]quality[/i] determines starting reliability, fuel efficiency, and cold weather performance. This mod lets you restore quality from any percentage up to 100%.
 
 [h2]Why Use This Mod?[/h2]
 [list]
@@ -29,8 +29,9 @@ By default, requires 2x more Spare Engine Parts than regular engine repair (maki
 [h2]Engine Quality Effects[/h2]
 [list]
 [*][b]Starting Reliability[/b]: Lower quality = higher chance to fail starting
-[*][b]Engine Power[/b]: Higher quality = more horsepower and performance
+[*][b]Fuel Efficiency[/b]: Lower quality = up to 50% more fuel consumption
 [*][b]Cold Weather Starting[/b]: Quality ≤65% struggles in cold weather
+[*][b]Engine Power[/b]: Higher quality = more horsepower (affects reverse speed)
 [/list]
 
 [h2]Requirements[/h2]
@@ -66,7 +67,7 @@ Unlike Easy Engine Rebuild, this mod gives you the ability to restore the engine
 
 [h2]Compatibility[/h2]
 [list]
-[*]Supported builds: 42.17+ (tested on b42.18.0 SP)
+[*]Supported builds: 42.17+ (tested on b42.19.0 SP)
 [*]Safe to add/remove mid-game
 [*]Works with all vanilla vehicles
 [*]Works with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2757712197]Vehicle Repair Overhaul[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3387539308]AutoMechanics[/url] and other popular mechanics mods
@@ -77,3 +78,6 @@ Unlike Easy Engine Rebuild, this mod gives you the ability to restore the engine
 [h2]Feedback[/h2]
 Found a bug or have suggestions? Leave a comment! I’d love to hear your thoughts and improve the mod further.
 [img]https://i.imgur.com/MKy1gMX.gif[/img]
+
+Workshop ID: 3543612325
+Mod ID: Ivmakk_RestoreEngineQuality

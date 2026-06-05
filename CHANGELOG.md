@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-06-05
+
+### Fixed
+- Multiplayer engine restoration never completing for players who joined a host (action stuck at 100%): the timed action is now registered as a global so the server can reconstruct it over the network. Completes the multiplayer fix started in 1.2.0.
+
 ## [1.2.0] - 2026-05-24
 
 ### Changed

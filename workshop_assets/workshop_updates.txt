@@ -1,3 +1,9 @@
+v1.2.1 - 2026-06-05
+
+Fixed
+- Multiplayer engine restoration getting stuck at 100% and never completing for players who joined a host
+
+
 v1.2.0 - 2026-05-24
 
 Changed

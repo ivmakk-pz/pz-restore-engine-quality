@@ -12,6 +12,12 @@ local REQ_RestorationPlan = require "REQ_RestorationPlan"
 ---@field jobType string
 local REQ_ISRestoreEngineQuality = ISBaseTimedAction:derive("ISRestoreEngineQuality")
 
+-- Expose as a global matching the derive() type name so multiplayer can reconstruct
+-- the networked timed action. The receiving side resolves the class by type string
+-- via LuaManager.get("ISRestoreEngineQuality") + getFunctionObject("ISRestoreEngineQuality.new");
+-- both look up _G, so a local-only/require module would fail and the action never completes.
+ISRestoreEngineQuality = REQ_ISRestoreEngineQuality
+
 
 function REQ_ISRestoreEngineQuality:isValid()
     local requirementResults = REQ_Requirements.validateAllRequirements(self.character, self.part)
