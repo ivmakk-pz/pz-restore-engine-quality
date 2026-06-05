@@ -25,3 +25,8 @@ Fixed:
 Added:
 - ChangeLog.txt for "Mod Update and Alert System" and "[B42] Mod Manager" compatibility
 [ ------ ]
+
+[ v1.2.1 - 2026-06-05 ]
+Fixed:
+- Multiplayer engine restoration stuck at 100% and never completing for players who joined a host
+[ ------ ]
