@@ -8,9 +8,11 @@ Project Zomboid mod (Build 42+) that adds engine quality restoration to the vehi
 
 - **Mod ID**: `Ivmakk_RestoreEngineQuality`
 - **Steam Workshop ID**: 3543612325
-- **Game versions**: 42.15+ (current), 42.12 (legacy)
+- **Game version**: 42.17+ (`versionMin` in `mod.info`)
 
 ## Development
+
+General PZ modding knowledge lives in the global **`pz-modding`** skill: game API and decompiled-source lookup, the game context repo, script syntax, multiplayer/dedicated-server testing, log reading, and the release, build-upgrade, localization and multi-version workflows (its `references/`). Use it for anything not specific to this mod.
 
 There are no build steps, linting, or automated tests. Development is manual: edit Lua files, launch the game, test in-game.
 
@@ -22,15 +24,12 @@ There are no build steps, linting, or automated tests. Development is manual: ed
 
 | Path | Purpose |
 |------|---------|
-| `Contents/mods/RestoreEngineQuality/42.15/` | **Active development** — current version source |
-| `Contents/mods/RestoreEngineQuality/42.12/` | Legacy version (same codebase, pinned to older builds) |
-| `PZ_files/` | **Deprecated** — vanilla reference files, to be removed (use game context repo via `pz-modding` skill instead) |
+| `Contents/mods/RestoreEngineQuality/42/` | **Active development** — the only version folder; 10 Lua modules |
+| `docs/` | Durable docs and `docs/tickets/` working tickets |
+| `dev/` | Local testing scaffolding — outside `Contents/`, never shipped. See `dev/README.md` |
 | `workshop_assets/` | Steam Workshop images and metadata |
-| `.claude/skills/` | Project skills (pz-modding, pz-mod-release, pz-mod-localization, pz-mod-multi-version) |
 | `.github/instructions/` | Legacy Copilot instruction files (reference material) |
-| `.github/prompts/` | Legacy Copilot prompts (superseded by `.claude/skills/`) |
-
-Both version folders contain the same 10 Lua modules. When making changes, update **both** unless the change is version-specific.
+| `.github/prompts/` | Legacy Copilot prompts (superseded by skills) |
 
 ## Architecture
 
@@ -71,12 +70,12 @@ REQ_RestorationPlan → REQ_ModOptions (reads parts-per-iteration setting)
 
 ## Release Workflow
 
-Uses git-flow-style branching. Invoke `/pz-mod-release` skill for the full process.
+Uses git-flow-style branching. Full process: `references/releasing.md` in the `pz-modding` skill.
 
 1. Develop on `release/X.Y.Z` branch
-2. `/pz-mod-release` — bumps version, finalizes all three changelogs, updates version references, then merges/tags/pushes when confirmed
+2. Follow `references/releasing.md` — bumps version, finalizes all three changelogs, updates version references, then merges/tags/pushes when confirmed
 
-**Files to keep in sync on release**: `mod.info` (both version folders), `CHANGELOG.md`, `workshop_assets/workshop_updates.txt`, `common/ChangeLog.txt`, README version badge.
+**Files to keep in sync on release**: `mod.info`, `CHANGELOG.md`, `workshop_assets/workshop_updates.txt`, `common/ChangeLog.txt`, and the build requirement in `README.md` if `versionMin` changed.
 
 ## Commit Messages
 
@@ -84,10 +83,10 @@ Keep a Changelog-ready format. Start with category prefix: `Added:`, `Changed:`,
 
 ## Conventions
 
-- `workshop_description.txt` uses Steam BBCode (`[b]`, `[h1]`, `[list][*]`), not Markdown
+- `workshop_description.bbcode` uses Steam BBCode (`[b]`, `[h1]`, `[list][*]`), not Markdown
 - Mod option naming: `UI_options_REQ_<optionName>` for labels, `_tooltip` suffix for tooltips
 - Localization prefix: `IGUI_REQ_` for in-game UI, `UI_options_REQ_` for settings menu
-- Localization format: JSON in 42.15 (`IG_UI.json`, `UI.json`), Lua text in 42.12 (`IG_UI_{LANG}.txt`, `UI_{LANG}.txt`)
+- Localization format: JSON (`IG_UI.json`, `UI.json`)
 - Do not create mod options or localizations unless explicitly asked — implement core functionality first
 
 ## Error Handling
@@ -99,4 +98,4 @@ Keep a Changelog-ready format. Start with category prefix: `Added:`, `Changed:`,
 
 ## Mod Options API
 
-Options use `PZAPI.ModOptions`. Full API reference in `.claude/skills/pz-modding/references/mod-options.md`. Do not create options unless explicitly asked. Use positive phrasing ("Show X" not "Hide X"). Labels/tooltips go in localization files.
+Options use `PZAPI.ModOptions`. Full API reference in the global `pz-modding` skill (`references/mod-options.md`). Do not create options unless explicitly asked. Use positive phrasing ("Show X" not "Hide X"). Labels/tooltips go in localization files.

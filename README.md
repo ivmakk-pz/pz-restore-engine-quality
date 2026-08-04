@@ -29,7 +29,7 @@ A Project Zomboid mod that allows players to restore degraded vehicle engine qua
 Quality improvement per restoration = `1 + (Mechanics Level - Required Level) / 2` (max 5%)
 
 **Restoration Results by Mechanics Level:**
-| Mechanics Level | Standard Cars (1%) | Heavy-Duty Cars (1%) | Sports Cars (1%) |
+| Mechanics Level | Standard Cars (requires 4) | Heavy-Duty Cars (requires 5) | Sports / Luxury / Modern (requires 6) |
 |-----------------|--------------------|--------------------|------------------|
 | 4               | 1%                 | n/a                | n/a              |
 | 5               | 1%                 | 1%                 | n/a              |
@@ -48,7 +48,12 @@ Quality improvement per restoration = `1 + (Mechanics Level - Required Level) / 
 
 Enable debug mode in PZ, open Vehicle Mechanics panel, click `ISVehicleMechanics.cheat=true` at the top to enable cheat options. Then RMB on Engine to access "CHEAT: Get Key" for a vehicle key.
 
-**Set engine quality to 30% via Lua console** (stand next to car):
+Mod logging: toggle `DEBUG_MODE` in `REQ_Utils.lua`. Messages are prefixed `[REQ]`; with debug off only warnings and errors print.
+
+**Set engine quality to 30% via Lua console** — single player only, stand next to the car:
 ```
-local v = getPlayer():getNearVehicle(); if v then local p = v:getScript():getEngineForce() * 0.6; v:setEngineFeature(30, v:getEngineLoudness(), p); v:transmitEngine() end
+local v = getPlayer():getNearVehicle(); if v then local p = v:getScript():getEngineForce() * 0.6; v:setEngineFeature(30, v:getEngineLoudness() * 2.7, p); v:transmitEngine() end
 ```
+`setEngineFeature` divides loudness by 2.7 internally, so pass `loudness * 2.7` to leave loudness unchanged.
+
+This does nothing in multiplayer: engine state is server-authoritative and `transmitEngine()` is a no-op on clients. Engine quality also cannot be lowered through gameplay — it is set when the vehicle is created, and installing an engine part resets it to 100%, so admin-spawned vehicles always start at 100%. For a server-side way to set it, see [`dev/README.md`](dev/README.md).
