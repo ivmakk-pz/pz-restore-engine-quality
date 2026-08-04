@@ -1,0 +1,6 @@
+name=REQ Debug Tools (local testing only)
+id=REQDebugTools
+description=Local-only helper to set vehicle engine quality server-side while testing Restore Engine Quality. Not for distribution.
+author=ivmakk
+modversion=0.0.1
+versionMin=42.0
