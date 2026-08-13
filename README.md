@@ -1,8 +1,10 @@
 # Restore Engine Quality
 
-[![Steam Workshop](https://img.shields.io/badge/Steam%20Workshop-View-blue)](https://steamcommunity.com/sharedfiles/filedetails/?id=3543612325)
+![Mod Version](https://img.shields.io/badge/Version-1.2.1-blue)
 
-A Project Zomboid mod that allows players to restore degraded vehicle engine quality beyond standard repair limits.
+[Steam Workshop page](https://steamcommunity.com/sharedfiles/filedetails/?id=3543612325)
+
+A Project Zomboid Build 42 mod that lets players restore degraded vehicle engine quality beyond standard repair limits, improving engine power and reducing loudness.
 
 ## Features
 
@@ -39,10 +41,23 @@ Quality improvement per restoration = `1 + (Mechanics Level - Required Level) / 
 | 9               | 3%                 | 3%                 | 2%               |
 | 10              | 4%                 | 3%                 | 3%               |
 
+## Installation
+
+### Steam Workshop
+1. Subscribe on the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3543612325)
+2. Enable in the Mods menu
+3. Start or load a game
+
+### Manual
+1. Download the mod-folder zip from the [Releases page](https://github.com/ivmakk-pz/pz-restore-engine-quality/releases)
+2. Unzip into `%USERPROFILE%\Zomboid\mods\`
+3. Enable in the Mods menu (unsubscribe from the Workshop copy first so the two don't clash - duplicate mod IDs resolve first-wins)
+
 ## Requirements
 
 - Project Zomboid Build 42.17+
 - Compatible with most vehicle and mechanics mods
+- No additional dependencies required
 
 ## Debug / Testing
 

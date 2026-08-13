@@ -9,6 +9,7 @@ Project Zomboid mod (Build 42+) that adds engine quality restoration to the vehi
 - **Mod ID**: `Ivmakk_RestoreEngineQuality`
 - **Steam Workshop ID**: 3543612325
 - **Game version**: 42.17+ (`versionMin` in `mod.info`)
+- **Repository**: [`ivmakk-pz/pz-restore-engine-quality`](https://github.com/ivmakk-pz/pz-restore-engine-quality) — public, GPL-3.0
 
 ## Development
 
@@ -28,8 +29,8 @@ There are no build steps, linting, or automated tests. Development is manual: ed
 | `docs/` | Durable docs (tracked). `docs/tickets/` holds local-only working tickets — gitignored, not committed |
 | `dev/` | Local testing scaffolding — outside `Contents/`, never shipped. See `dev/README.md` |
 | `workshop_assets/` | Steam Workshop images and metadata |
-| `.github/instructions/` | Legacy Copilot instruction files (reference material) |
-| `.github/prompts/` | Legacy Copilot prompts (superseded by skills) |
+| `.github/workflows/` | Tag-triggered release CI (`release.yml`) |
+| `.github/copilot-instructions.md` | Code-review rules for the Copilot PR bot — keep (not legacy) |
 
 ## Architecture
 
@@ -75,7 +76,9 @@ Uses git-flow-style branching. Full process: `references/releasing.md` in the `p
 1. Develop on `release/X.Y.Z` branch
 2. Follow `references/releasing.md` — bumps version, finalizes all three changelogs, updates version references, then merges/tags/pushes when confirmed
 
-**Files to keep in sync on release**: `mod.info`, `CHANGELOG.md`, `workshop_assets/workshop_updates.txt`, `common/ChangeLog.txt`, and the build requirement in `README.md` if `versionMin` changed.
+Pushing a `vX.Y.Z` tag triggers `.github/workflows/release.yml`: it verifies the tag matches `mod.info` `modversion` (failing the release on mismatch), builds the mod-folder zip, and publishes a GitHub Release with notes extracted from `CHANGELOG.md`. So the version bump and tag must be consistent.
+
+**Files to keep in sync on release**: `mod.info` (`modversion`), `CHANGELOG.md`, `workshop_assets/workshop_updates.txt`, `common/ChangeLog.txt`, the `README.md` version badge (`Version-X.Y.Z`), and the build requirement in `README.md` if `versionMin` changed.
 
 ## Commit Messages
 
