@@ -1,0 +1,39 @@
+name: Release
+on:
+  push:
+    tags: ['v*.*.*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Derive version, verify it matches mod.info
+        id: v
+        run: |
+          ver="${GITHUB_REF_NAME#v}"
+          echo "ver=$ver" >> "$GITHUB_OUTPUT"
+          modver=$(grep -oP '^modversion=\K.*' Contents/mods/RestoreEngineQuality/42/mod.info | tr -d '\r')
+          [ "$modver" = "$ver" ] || { echo "::error::tag v$ver != mod.info modversion $modver"; exit 1; }
+
+      - name: Build mod-folder zip
+        run: |
+          git archive --format=zip --prefix=RestoreEngineQuality/ \
+            "$GITHUB_REF_NAME:Contents/mods/RestoreEngineQuality" -o "RestoreEngineQuality-${{ steps.v.outputs.ver }}.zip"
+
+      - name: Extract changelog notes + date
+        run: |
+          ver="${{ steps.v.outputs.ver }}"
+          awk -v v="$ver" 'index($0,"## ["v"]")==1{g=1;next} g&&/^## \[/{exit} g' CHANGELOG.md > NOTES.md
+          echo "date=$(grep -oP "^## \[$ver\] - \K.*" CHANGELOG.md | tr -d '\r')" >> "$GITHUB_ENV"
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME - $date" \
+            --notes-file NOTES.md --latest \
+            "RestoreEngineQuality-${{ steps.v.outputs.ver }}.zip"
