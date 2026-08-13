@@ -25,7 +25,7 @@ There are no build steps, linting, or automated tests. Development is manual: ed
 | Path | Purpose |
 |------|---------|
 | `Contents/mods/RestoreEngineQuality/42/` | **Active development** — the only version folder; 10 Lua modules |
-| `docs/` | Durable docs and `docs/tickets/` working tickets |
+| `docs/` | Durable docs (tracked). `docs/tickets/` holds local-only working tickets — gitignored, not committed |
 | `dev/` | Local testing scaffolding — outside `Contents/`, never shipped. See `dev/README.md` |
 | `workshop_assets/` | Steam Workshop images and metadata |
 | `.github/instructions/` | Legacy Copilot instruction files (reference material) |
