@@ -1,11 +1,12 @@
 name: Bug report
 description: Something in Restore Engine Quality is broken or behaves wrong in-game.
+type: Bug
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting. Please fill in the fields below - the game build, the mode, and a log excerpt are what make a bug reproducible. General questions are better as a [Steam Workshop comment](https://steamcommunity.com/sharedfiles/filedetails/?id=3543612325).
+        Thanks for reporting. The game build, the mode, and a log excerpt are what make a bug reproducible, so please fill those in. General questions are better as a [Steam Workshop comment](https://steamcommunity.com/sharedfiles/filedetails/?id=3543612325).
 
   - type: input
     id: game-build
@@ -16,12 +17,17 @@ body:
     validations:
       required: true
 
-  - type: input
+  - type: dropdown
     id: mod-version
     attributes:
       label: Mod version
-      description: Restore Engine Quality version (Workshop change notes, or the value in mod.info).
-      placeholder: "1.2.1"
+      description: Restore Engine Quality version (Workshop change notes, or the value in mod.info). Pick "Other / not listed" if yours isn't here.
+      options:
+        - "1.2.1"
+        - "1.2.0"
+        - "1.1.0"
+        - "1.0.0"
+        - "Other / not listed"
     validations:
       required: true
 
@@ -42,7 +48,7 @@ body:
     id: mod-isolation
     attributes:
       label: Does it still happen with other mods disabled?
-      description: Please don't list every enabled mod - instead test with only Restore Engine Quality enabled and tell us the result. This is the single most useful thing for ruling out a mod conflict.
+      description: No need to list every enabled mod. Instead, test with only Restore Engine Quality enabled and note what happens. That's the quickest way to rule out a conflict with another mod.
       options:
         - "Yes - it still happens with only Restore Engine Quality enabled"
         - "No - it goes away when I disable my other mods"
@@ -60,40 +66,24 @@ body:
       required: false
 
   - type: textarea
-    id: steps
-    attributes:
-      label: Steps to reproduce
-      description: What did you do, step by step?
-      placeholder: |
-        1. Spawn / find a vehicle with a sub-100% engine
-        2. Open Vehicle Mechanics, right-click the engine
-        3. Click "Restore Engine Quality"
-        4. ...
-    validations:
-      required: true
-
-  - type: textarea
     id: what-went-wrong
     attributes:
       label: What went wrong?
-      description: What you saw, and what you expected instead.
+      description: What you did (step by step), what happened, and what you expected instead. If a screenshot shows the problem, drag it in here.
+      placeholder: |
+        1. Spawn / find a vehicle with a sub-100% engine
+        2. Open Vehicle Mechanics, right-click the engine, click "Restore Engine Quality"
+        3. What happened: ...
+        4. What I expected: ...
     validations:
       required: true
 
   - type: textarea
     id: logs
     attributes:
-      label: Log excerpt
+      label: Logs
       description: |
-        Paste the relevant lines. Logs live in `%USERPROFILE%\Zomboid\Logs\` - the newest `*_DebugLog.txt` (client) and, for multiplayer, `*_DebugLog-server.txt` (server). `%USERPROFILE%\Zomboid\console.txt` also holds `[REQ]`-prefixed messages. Enabling `DEBUG_MODE` (see the README) surfaces more detail.
-      render: text
+        Either paste the relevant lines, or drag in the full log files. Logs live in `%USERPROFILE%\Zomboid\Logs\`: the newest `*_DebugLog.txt` (client) and, for multiplayer, `*_DebugLog-server.txt` (server). `%USERPROFILE%\Zomboid\console.txt` also holds `[REQ]`-prefixed messages.
+      placeholder: Paste the relevant lines, or drag the full log files here.
     validations:
       required: false
-
-  - type: checkboxes
-    id: checks
-    attributes:
-      label: Before submitting
-      options:
-        - label: I'm on the latest version (re-subscribe on the Workshop to force Steam to re-download it).
-          required: true

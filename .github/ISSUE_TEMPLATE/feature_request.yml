@@ -1,5 +1,6 @@
 name: Feature request
 description: Suggest an improvement or new capability for Restore Engine Quality.
+type: Feature
 labels: ["enhancement"]
 body:
   - type: markdown
@@ -8,24 +9,9 @@ body:
         Thanks for the idea. Keep it focused on this mod (engine quality restoration and the vehicle mechanics menu).
 
   - type: textarea
-    id: problem
+    id: idea
     attributes:
-      label: Problem or motivation
-      description: What are you trying to do, and what makes it awkward or impossible today?
+      label: Your idea
+      description: What should the mod do, and what makes it worth having? Describe it from a player's point of view.
     validations:
       required: true
-
-  - type: textarea
-    id: proposal
-    attributes:
-      label: Proposed solution
-      description: What should the mod do instead? Describe it from a player's point of view.
-    validations:
-      required: true
-
-  - type: textarea
-    id: alternatives
-    attributes:
-      label: Alternatives considered (optional)
-    validations:
-      required: false
