@@ -78,5 +78,3 @@ This does nothing in multiplayer: engine state is server-authoritative and `tran
 GPL-3.0. Copyright (C) 2025 ivmakk.
 
 You are free to use, study, and modify this mod. Any redistributed or reuploaded modified version must stay GPL-3.0, keep the original author credit, and publish its full source. Contributions back to the repository are welcome. See [`LICENSE`](LICENSE) for the full text.
-
-Note: this license is not retroactive. Versions released before the relicense stay under their original MIT terms for whoever holds them; GPL-3.0 applies going forward.
