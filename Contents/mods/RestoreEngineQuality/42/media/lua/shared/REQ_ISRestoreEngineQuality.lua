@@ -1,5 +1,6 @@
 require "TimedActions/ISBaseTimedAction"
 
+local REQ_Requirements = require "REQ_Requirements"
 local REQ_Utils = require "REQ_Utils"
 local REQ_Inventory = require "REQ_Inventory"
 local REQ_RestorationPlan = require "REQ_RestorationPlan"
@@ -20,6 +21,14 @@ ISRestoreEngineQuality = REQ_ISRestoreEngineQuality
 
 function REQ_ISRestoreEngineQuality:isValid()
     return true
+end
+
+-- One-time gate, run once as the queue reaches this action (not per tick like isValid).
+-- Guards a stale queued action whose requirements lapsed after it was queued (e.g. a
+-- second restore whose parts were consumed by the first). Client-side queue logic only;
+-- server-side network reconstruction never calls it.
+function REQ_ISRestoreEngineQuality:isValidStart()
+    return REQ_Requirements.validateAllRequirements(self.character, self.part):areAllRequirementsMet()
 end
 
 function REQ_ISRestoreEngineQuality:getDuration()
