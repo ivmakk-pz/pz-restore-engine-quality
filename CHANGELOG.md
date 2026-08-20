@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- Multiplayer stuck looping work animation when starting engine restoration: the timed action now guards a nil engine part in `new()` and overrides `getDuration()` like vanilla, so server-side network reconstruction no longer throws and leaves the client animating forever.
+
 ## [1.2.1] - 2026-06-05
 
 ### Fixed

@@ -1,6 +1,5 @@
 require "TimedActions/ISBaseTimedAction"
 
-local REQ_Requirements = require "REQ_Requirements"
 local REQ_Utils = require "REQ_Utils"
 local REQ_Inventory = require "REQ_Inventory"
 local REQ_RestorationPlan = require "REQ_RestorationPlan"
@@ -20,8 +19,17 @@ ISRestoreEngineQuality = REQ_ISRestoreEngineQuality
 
 
 function REQ_ISRestoreEngineQuality:isValid()
-    local requirementResults = REQ_Requirements.validateAllRequirements(self.character, self.part)
-    return requirementResults:areAllRequirementsMet()
+    return true
+end
+
+function REQ_ISRestoreEngineQuality:getDuration()
+    if self.part == nil or self.item == nil then
+        return 0
+    end
+    if self.character:isTimedActionInstant() then
+        return 1
+    end
+    return self.maxTime
 end
 
 function REQ_ISRestoreEngineQuality:waitToStart()
@@ -49,13 +57,6 @@ end
 function REQ_ISRestoreEngineQuality:perform()
 	self.item:setJobDelta(0)
 	ISBaseTimedAction.perform(self)
-end
-
-function REQ_ISRestoreEngineQuality:getEngineQuality(part)
-    if part:getId() == "Engine" and part:getVehicle() then
-        return part:getVehicle():getEngineQuality()
-    end
-    return 100
 end
 
 ---Complete the engine quality restoration action
@@ -109,9 +110,11 @@ end
 function REQ_ISRestoreEngineQuality:new(character, part, item, maxTime)
     local o = ISBaseTimedAction.new(self, character)
     ---@diagnostic disable-next-line: inject-field
-    o.vehicle = part:getVehicle()
-    ---@diagnostic disable-next-line: inject-field
     o.part = part
+    if part ~= nil then
+        ---@diagnostic disable-next-line: inject-field
+        o.vehicle = part:getVehicle()
+    end
     ---@diagnostic disable-next-line: inject-field
     o.item = item
     o.maxTime = maxTime or 400  -- Longer than regular repair
