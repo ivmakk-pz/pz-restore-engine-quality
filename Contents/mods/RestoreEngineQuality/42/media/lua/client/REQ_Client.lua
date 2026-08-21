@@ -1,6 +1,5 @@
 -- Restore Engine Quality Main Client File
 -- Author: ivmakk
--- Version: 1.1.0
 
 local vehicleMechanics = require "REQ_ISVehicleMechanics"
 local modOptions = require "REQ_ModOptions"
