@@ -23,13 +23,12 @@ end
 -- ===================================================================================================== --
 
 ---Initialize mod options when the game starts
----@return boolean registered True if the options were registered with PZAPI
 function REQ_ModOptions.initialize()
     if not PZAPI or not PZAPI.ModOptions then
         REQ_Utils.logWarning("ModOptions API not available, using default values")
-        return false
+        return
     end
-
+    
     -- Create the mod options object
     local options = PZAPI.ModOptions:create("Ivmakk_RestoreEngineQuality", getText("UI_options_REQ_title"))
     
@@ -44,8 +43,6 @@ function REQ_ModOptions.initialize()
         getText("UI_options_REQ_enginePartsPerIteration_tooltip")
     )
     options:addDescription(getText("UI_options_REQ_enginePartsPerIteration_tooltip"))
-
-    return true
 end
 
 return REQ_ModOptions

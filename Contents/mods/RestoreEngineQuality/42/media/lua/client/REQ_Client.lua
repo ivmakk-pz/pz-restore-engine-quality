@@ -25,18 +25,16 @@ function RestoreEngineQuality.initModOptions()
         return
     end
 
-    local success, registered = pcall(function()
-        return modOptions.initialize()
+    local success, errorMsg = pcall(function()
+        modOptions.initialize()
     end)
 
     if not success then
-        REQ_Utils.logError(tostring(registered))
+        REQ_Utils.logError(tostring(errorMsg))
         return
     end
 
-    -- Latch the guard only once options are actually registered, so a failed or
-    -- skipped attempt (e.g. PZAPI not ready) can retry on a later boot.
-    RestoreEngineQuality.optionsInitialized = registered == true
+    RestoreEngineQuality.optionsInitialized = true
 end
 
 -- Initialize the mod
