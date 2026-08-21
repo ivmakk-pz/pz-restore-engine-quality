@@ -73,12 +73,18 @@ function REQ_ISVehicleMechanics.extendedDoPartContextMenu(self, part, x, y)
             
             -- Create context menu text with quality change preview (only show new value if it's bigger)
             local menuText = REQ_ISVehicleMechanics.generateMenuText(restorationDetails)
-            local option = self.context:addOption(menuText, getPlayer(), ISVehicleMechanics.onRestoreEngineQuality, part)
+            local option = self.context:addOption(menuText, self.chr, ISVehicleMechanics.onRestoreEngineQuality, part)
             
             -- Add comprehensive tooltip with requirement checking and restoration preview
             REQ_Tooltips.createRestoreEngineTooltip(option, requirementResults, restorationDetails)
 
             if not requirementResults:areAllRequirementsMet() then
+                option.notAvailable = true
+            end
+
+            -- Grey out while a restore is already queued/in progress, so a second
+            -- click during the action does not stack a redundant restore chain.
+            if ISTimedActionQueue.hasActionType(self.chr, "ISRestoreEngineQuality") then
                 option.notAvailable = true
             end
         end

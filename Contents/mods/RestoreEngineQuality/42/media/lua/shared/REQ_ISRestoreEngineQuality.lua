@@ -20,8 +20,25 @@ ISRestoreEngineQuality = REQ_ISRestoreEngineQuality
 
 
 function REQ_ISRestoreEngineQuality:isValid()
-    local requirementResults = REQ_Requirements.validateAllRequirements(self.character, self.part)
-    return requirementResults:areAllRequirementsMet()
+    return true
+end
+
+-- One-time gate, run once as the queue reaches this action (not per tick like isValid).
+-- Guards a stale queued action whose requirements lapsed after it was queued (e.g. a
+-- second restore whose parts were consumed by the first). Client-side queue logic only;
+-- server-side network reconstruction never calls it.
+function REQ_ISRestoreEngineQuality:isValidStart()
+    return REQ_Requirements.validateAllRequirements(self.character, self.part):areAllRequirementsMet()
+end
+
+function REQ_ISRestoreEngineQuality:getDuration()
+    if self.part == nil or self.item == nil then
+        return 0
+    end
+    if self.character:isTimedActionInstant() then
+        return 1
+    end
+    return self.maxTime
 end
 
 function REQ_ISRestoreEngineQuality:waitToStart()
@@ -49,13 +66,6 @@ end
 function REQ_ISRestoreEngineQuality:perform()
 	self.item:setJobDelta(0)
 	ISBaseTimedAction.perform(self)
-end
-
-function REQ_ISRestoreEngineQuality:getEngineQuality(part)
-    if part:getId() == "Engine" and part:getVehicle() then
-        return part:getVehicle():getEngineQuality()
-    end
-    return 100
 end
 
 ---Complete the engine quality restoration action
@@ -102,16 +112,18 @@ end
 
 ---Create new engine quality restoration action
 ---@param character IsoPlayer
----@param part VehiclePart
----@param item InventoryItem
+---@param part VehiclePart? nil-tolerant: server-side MP reconstruction may pass nil
+---@param item InventoryItem? nil-tolerant: server-side MP reconstruction may pass nil
 ---@param maxTime number?
 ---@return any
 function REQ_ISRestoreEngineQuality:new(character, part, item, maxTime)
     local o = ISBaseTimedAction.new(self, character)
     ---@diagnostic disable-next-line: inject-field
-    o.vehicle = part:getVehicle()
-    ---@diagnostic disable-next-line: inject-field
     o.part = part
+    if part ~= nil then
+        ---@diagnostic disable-next-line: inject-field
+        o.vehicle = part:getVehicle()
+    end
     ---@diagnostic disable-next-line: inject-field
     o.item = item
     o.maxTime = maxTime or 400  -- Longer than regular repair

@@ -1,6 +1,5 @@
 -- Restore Engine Quality Main Client File
 -- Author: ivmakk
--- Version: 1.1.0
 
 local vehicleMechanics = require "REQ_ISVehicleMechanics"
 local modOptions = require "REQ_ModOptions"
@@ -11,6 +10,31 @@ local RestoreEngineQuality = {}
 
 -- Initialization state tracking
 RestoreEngineQuality.isInitialized = false
+RestoreEngineQuality.optionsInitialized = false
+
+-- Register mod options at game boot so they are in PZAPI.ModOptions.Dict at the
+-- title screen. Registering later (e.g. on OnInitGlobalModData, which fires only
+-- in-world) leaves the option unregistered at the main menu, so a title-screen
+-- save of any options mod parks our line newline-less and the vanilla save() bug
+-- fuses it into the previous line, resetting the slider to default on next load.
+function RestoreEngineQuality.initModOptions()
+    -- OnGameBoot can fire from several sites; register only once to avoid a
+    -- duplicate options panel and a reset to defaults (create() does not dedup).
+    if RestoreEngineQuality.optionsInitialized then
+        return
+    end
+
+    local success, errorMsg = pcall(function()
+        modOptions.initialize()
+    end)
+
+    if not success then
+        REQ_Utils.logError(tostring(errorMsg))
+        return
+    end
+
+    RestoreEngineQuality.optionsInitialized = true
+end
 
 -- Initialize the mod
 function RestoreEngineQuality.init()
@@ -18,13 +42,12 @@ function RestoreEngineQuality.init()
     if RestoreEngineQuality.isInitialized then
         return
     end
-          
+
     -- Initialize our vehicle mechanics override to ensure compatibility with other mods
     local success, errorMsg = pcall(function()
-        modOptions.initialize()
         vehicleMechanics.initialize()
     end)
-    
+
     if not success then
         REQ_Utils.logError(tostring(errorMsg))
     end
@@ -34,4 +57,5 @@ function RestoreEngineQuality.init()
 end
 
 -- Hook into game events - only once
+Events.OnGameBoot.Add(RestoreEngineQuality.initModOptions)
 Events.OnInitGlobalModData.Add(RestoreEngineQuality.init)
