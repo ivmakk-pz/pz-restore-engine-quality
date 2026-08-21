@@ -1,6 +1,6 @@
 # Restore Engine Quality
 
-![Mod Version](https://img.shields.io/badge/Version-1.2.1-blue)
+![Mod Version](https://img.shields.io/badge/Version-1.2.2-blue)
 
 [Steam Workshop page](https://steamcommunity.com/sharedfiles/filedetails/?id=3543612325)
 

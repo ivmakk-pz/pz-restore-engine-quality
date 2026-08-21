@@ -23,6 +23,7 @@ body:
       label: Mod version
       description: Restore Engine Quality version (Workshop change notes, or the value in mod.info). Pick "Other / not listed" if yours isn't here.
       options:
+        - "1.2.2"
         - "1.2.1"
         - "1.2.0"
         - "1.1.0"

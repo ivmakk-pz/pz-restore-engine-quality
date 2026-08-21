@@ -1,3 +1,10 @@
+v1.2.2 - 2026-08-21
+
+Fixed
+- Added safeguards for a rare multiplayer case where the restoration animation could keep looping instead of finishing.
+- The parts-per-iteration option no longer resets to default when you save Mod Options from the title screen.
+
+
 v1.2.1 - 2026-06-05
 
 Fixed
