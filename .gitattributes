@@ -1,0 +1,8 @@
+# Normalize all text files to LF in the repository, regardless of the editor or
+# OS that wrote them. Stops CRLF churn from Windows editors showing whole files
+# as changed. Git auto-detects binary files and leaves them untouched.
+* text=auto eol=lf
+
+# Binary assets: never touch line endings.
+*.png binary
+*.jpg binary
