@@ -7,6 +7,7 @@
 ### Fixed
 - Added safeguards for a rare multiplayer case where the restoration animation could keep looping instead of finishing.
 - The parts-per-iteration option no longer resets to default when you save Mod Options from the title screen.
+- In split-screen, engine restoration now runs as the player who started it, not the first player.
 
 ## [1.2.1] - 2026-06-05
 
