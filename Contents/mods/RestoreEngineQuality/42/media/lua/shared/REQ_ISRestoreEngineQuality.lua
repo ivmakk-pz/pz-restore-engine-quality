@@ -112,8 +112,8 @@ end
 
 ---Create new engine quality restoration action
 ---@param character IsoPlayer
----@param part VehiclePart
----@param item InventoryItem
+---@param part VehiclePart? nil-tolerant: server-side MP reconstruction may pass nil
+---@param item InventoryItem? nil-tolerant: server-side MP reconstruction may pass nil
 ---@param maxTime number?
 ---@return any
 function REQ_ISRestoreEngineQuality:new(character, part, item, maxTime)
