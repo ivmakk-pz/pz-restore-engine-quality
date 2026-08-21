@@ -34,7 +34,7 @@ There are no build steps, linting, or automated tests. Development is manual: ed
 
 ## Architecture
 
-Entry point is `REQ_Client.lua`, which hooks `Events.OnInitGlobalModData` to initialize the mod once. All modules use Lua `require` and return a table.
+Entry point is `REQ_Client.lua`. It registers mod options on `Events.OnGameBoot` (so they are in `PZAPI.ModOptions.Dict` at the title screen) and patches vehicle mechanics on `Events.OnInitGlobalModData`, each guarded to run once. All modules use Lua `require` and return a table.
 
 **Module dependency flow:**
 
