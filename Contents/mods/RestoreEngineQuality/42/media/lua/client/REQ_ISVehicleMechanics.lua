@@ -81,6 +81,12 @@ function REQ_ISVehicleMechanics.extendedDoPartContextMenu(self, part, x, y)
             if not requirementResults:areAllRequirementsMet() then
                 option.notAvailable = true
             end
+
+            -- Grey out while a restore is already queued/in progress, so a second
+            -- click during the action does not stack a redundant restore chain.
+            if ISTimedActionQueue.hasActionType(self.chr, "ISRestoreEngineQuality") then
+                option.notAvailable = true
+            end
         end
     end
 end

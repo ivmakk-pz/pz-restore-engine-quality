@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+- Multiplayer stuck looping work animation when starting engine restoration: the timed action now guards a nil engine part in `new()` and overrides `getDuration()` like vanilla, so server-side network reconstruction no longer throws and leaves the client animating forever.
+- Restore option no longer stacks a redundant restoration when clicked again while one is already in progress: the option greys out while a restore is queued, and the action re-checks requirements once before starting so a stale queued restore is dropped instead of running a no-op.
+
 ## [1.2.1] - 2026-06-05
 
 ### Fixed
