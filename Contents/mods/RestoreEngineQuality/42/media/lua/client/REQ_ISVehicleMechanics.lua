@@ -73,7 +73,7 @@ function REQ_ISVehicleMechanics.extendedDoPartContextMenu(self, part, x, y)
             
             -- Create context menu text with quality change preview (only show new value if it's bigger)
             local menuText = REQ_ISVehicleMechanics.generateMenuText(restorationDetails)
-            local option = self.context:addOption(menuText, getPlayer(), ISVehicleMechanics.onRestoreEngineQuality, part)
+            local option = self.context:addOption(menuText, self.chr, ISVehicleMechanics.onRestoreEngineQuality, part)
             
             -- Add comprehensive tooltip with requirement checking and restoration preview
             REQ_Tooltips.createRestoreEngineTooltip(option, requirementResults, restorationDetails)
