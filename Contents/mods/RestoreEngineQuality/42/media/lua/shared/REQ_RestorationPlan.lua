@@ -81,7 +81,11 @@ function REQ_RestorationPlan:new(currentQuality, newQuality, qualityIncrease, us
     return o
 end
 
-function REQ_RestorationPlan.calculateFromGameState(character, part)
+---@param character IsoPlayer
+---@param part VehiclePart
+---@param partsPerIteration number? overrides the local mod option; the server has no client option
+---@return REQ_RestorationPlan
+function REQ_RestorationPlan.calculateFromGameState(character, part, partsPerIteration)
     local REQ_Inventory = require "REQ_Inventory"
     local numberOfParts = REQ_Inventory.countTypeRecurse(character, "EngineParts")
     local currentQuality = part:getVehicle():getEngineQuality()
@@ -92,7 +96,10 @@ function REQ_RestorationPlan.calculateFromGameState(character, part)
     local qualityPerIteration = REQ_RestorationPlan.calculateQualityPerIteration(mechanicLevel, part:getVehicle():getScript():getEngineRepairLevel())
     
     -- Get configurable engine parts per iteration from mod options
-    local partsPerIteration = REQ_ModOptions.getEnginePartsPerIteration()
+    -- Clamped to the slider range: in MP the value comes from the client packet, and a
+    -- step below 1 would stall the simulation loop below
+    partsPerIteration = partsPerIteration or REQ_ModOptions.getEnginePartsPerIteration()
+    partsPerIteration = math.floor(math.max(1, math.min(5, partsPerIteration)))
     
     local usedParts = 0
     local newQuality = currentQuality
