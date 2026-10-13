@@ -37,3 +37,8 @@ Fixed:
 - The parts-per-iteration option no longer resets to default when you save Mod Options from the title screen.
 - In split-screen, engine restoration now runs as the player who started it, not the first player.
 [ ------ ]
+
+[ v1.2.3 - 2026-10-13 ]
+Fixed:
+- On dedicated servers, restoration now uses your Engine Parts Multiplier setting instead of always the default of 2.
+[ ------ ]
