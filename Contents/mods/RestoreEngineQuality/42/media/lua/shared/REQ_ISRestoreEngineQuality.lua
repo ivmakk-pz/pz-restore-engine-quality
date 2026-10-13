@@ -4,6 +4,7 @@ local REQ_Requirements = require "REQ_Requirements"
 local REQ_Utils = require "REQ_Utils"
 local REQ_Inventory = require "REQ_Inventory"
 local REQ_RestorationPlan = require "REQ_RestorationPlan"
+local REQ_ModOptions = require "REQ_ModOptions"
 
 ---@class REQ_ISRestoreEngineQuality : ISBaseTimedAction
 ---@field vehicle BaseVehicle
@@ -78,7 +79,7 @@ function REQ_ISRestoreEngineQuality:complete()
         end
         
         -- Use the new calculation function for consistency
-        local restorationDetails = REQ_RestorationPlan.calculateFromGameState(self.character, self.part)
+        local restorationDetails = REQ_RestorationPlan.calculateFromGameState(self.character, self.part, self.partsPerIteration)
         local currentQuality = restorationDetails.currentQuality
         local newQuality = restorationDetails.newQuality
         local usedParts = restorationDetails.usedParts
@@ -115,8 +116,10 @@ end
 ---@param part VehiclePart? nil-tolerant: server-side MP reconstruction may pass nil
 ---@param item InventoryItem? nil-tolerant: server-side MP reconstruction may pass nil
 ---@param maxTime number?
+---@param partsPerIteration number? the player's mod option; must be a new() parameter so
+---NetTimedAction sends it to the server, which cannot read the client's mod options
 ---@return any
-function REQ_ISRestoreEngineQuality:new(character, part, item, maxTime)
+function REQ_ISRestoreEngineQuality:new(character, part, item, maxTime, partsPerIteration)
     local o = ISBaseTimedAction.new(self, character)
     ---@diagnostic disable-next-line: inject-field
     o.part = part
@@ -127,6 +130,8 @@ function REQ_ISRestoreEngineQuality:new(character, part, item, maxTime)
     ---@diagnostic disable-next-line: inject-field
     o.item = item
     o.maxTime = maxTime or 400  -- Longer than regular repair
+    ---@diagnostic disable-next-line: inject-field
+    o.partsPerIteration = partsPerIteration or REQ_ModOptions.getEnginePartsPerIteration()
     ---@diagnostic disable-next-line: inject-field
     o.jobType = "Restore Engine Quality"
     return o

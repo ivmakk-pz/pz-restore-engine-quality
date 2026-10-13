@@ -70,7 +70,7 @@ description=Unlike Easy Engine Rebuild, this mod gives you the ability to restor
 description=
 description=[h2]Compatibility[/h2]
 description=[list]
-description=[*]Supported builds: 42.17+ (tested on b42.20.3 SP & MP)
+description=[*]Supported builds: 42.17+ (tested on b42.21.0 SP & MP)
 description=[*]Safe to add/remove mid-game
 description=[*]Works with all vanilla vehicles
 description=[*]Works with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2757712197]Vehicle Repair Overhaul[/url], [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3387539308]AutoMechanics[/url] and other popular mechanics mods
@@ -80,6 +80,6 @@ description=[/list]
 description=
 description=[h2]Feedback[/h2]
 description=Found a bug or have suggestions? Leave a comment! I'd love to hear your thoughts and improve the mod further.
-description=[img]https://i.imgur.com/MKy1gMX.gif[/img]
+description=[url=https://github.com/ivmakk-pz/pz-restore-engine-quality][img]https://i.imgur.com/schBjIY.png[/img][/url]
 tags=Build 42;Balance;Multiplayer;Vehicles;QoL
 visibility=public

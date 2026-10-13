@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-10-13
+
+### Fixed
+- On dedicated servers, restoration now uses your Engine Parts Multiplier setting instead of always the default of 2.
+
 ## [1.2.2] - 2026-08-21
 
 ### Fixed
